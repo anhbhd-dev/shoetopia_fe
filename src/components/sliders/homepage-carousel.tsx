@@ -3,7 +3,7 @@ import { Carousel } from "@material-tailwind/react";
 import Image from "next/image";
 export function HomepageCarousel() {
   return (
-    <div className="w-full flex justify-center">
+    <div className="w-full flex justify-center ">
       <Carousel
         className="lg:mt-10 mt-5 rounded-xl"
         autoplay={true}
