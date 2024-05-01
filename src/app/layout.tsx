@@ -20,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <StickyNavbar />
-        <div className="min-h-screen lg:px-40">{children}</div>
+        <div style={{ minHeight: "70vh" }} className="lg:px-40">
+          {children}
+        </div>
         <Footer />
       </body>
     </html>
