@@ -1,13 +1,14 @@
 "use client";
-import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
-import "swiper/css";
 import { TestimonialCard } from "./card";
 
 export default function TestimonialSlider() {
+  return null;
   return (
     <div className="mt-20">
-      <p className="lg:text-2xl text-xl font-bold lg:mb-5 mb-2">Testimonial</p>
+      <p className="lg:text-2xl text-xl font-bold lg:mb-5 mb-2">
+        Trải nghiệm người dùng
+      </p>
       <Swiper
         className="mt-5"
         spaceBetween={20}

@@ -1,13 +1,12 @@
 import { formatMoney } from "@/utils/format-money";
 import React from "react";
-import Image from "next/image";
+import { Image } from "antd";
 export default function CartItem() {
   return (
     <div>
       <div className="justify-between mb-6 rounded-lg bg-white p-3 pr-5 shadow-md sm:flex sm:justify-start">
         <Image
-          width={50}
-          height={50}
+          width={150}
           src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80"
           alt="product-image"
           className=" rounded-lg h-28 w-28 object-cover"

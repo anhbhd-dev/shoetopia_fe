@@ -11,8 +11,9 @@ import React from "react";
 import {
   PRODUCTS_LIST_BASE_URL,
   BASE_URL,
-  ORDERS_LIST_BASE_URL,
+  CART_BASE_URL,
 } from "@/routes/routes";
+import Image from "next/image";
 export function StickyNavbar() {
   const [openNav, setOpenNav] = React.useState(false);
 
@@ -31,12 +32,30 @@ export function StickyNavbar() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <Link
-          href={PRODUCTS_LIST_BASE_URL}
-          className="flex items-center text-sm font-semibold uppercase"
-        >
-          Sản phẩm
-        </Link>
+        <div className="flex gap-5">
+          <Link
+            href={PRODUCTS_LIST_BASE_URL}
+            className="flex items-center text-sm font-semibold uppercase"
+          >
+            Sản phẩm
+          </Link>
+          <Link
+            href={CART_BASE_URL}
+            className="flex items-center text-sm font-semibold uppercase"
+          >
+            <div className="w-6 relative">
+              <Image
+                src="/images/shopping-cart.png"
+                alt="shopping-cart"
+                width={24}
+                height={24}
+              />
+              <div className="rounded-full bg-red-500 absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center text-xs text-white">
+                0
+              </div>
+            </div>
+          </Link>
+        </div>
       </Typography>
     </ul>
   );
@@ -53,6 +72,7 @@ export function StickyNavbar() {
           </Link>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
+
             <div className="flex items-center gap-x-1">
               <Button
                 variant="text"
