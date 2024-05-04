@@ -14,7 +14,7 @@ export function HomepageCarousel() {
             key={i}
             src={`/banners/banner${i + 1}.jpg`}
             alt="image 1"
-            className="lg:max-h-[600px] max-h-44 w-full object-cover"
+            className="lg:max-h-[550px] max-h-44 w-full object-cover"
             width={1920}
             height={500}
           />

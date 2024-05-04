@@ -19,7 +19,7 @@ export default function HomeProductsSlideListing() {
     const fetchAllHomeProducts = async () => {
       await Promise.all(
         homeCategories.map(async (category: Category) => {
-          return await fetchProducts({ categories: category._id });
+          return await fetchProducts({ categories: category._id, limit: 20 });
         })
       ).then((data) => {
         setHomeProducts(data as any[]);

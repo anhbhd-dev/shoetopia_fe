@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
     const refreshToken = localStorage.getItem("refreshToken");
     // Nếu lỗi 403 (Forbidden)
     if (
-      (error.response.status === 403 || error.response.status === 401) &&
+      (error?.response.status === 403 || error?.response.status === 401) &&
       refreshToken &&
       !originalRequest._retry
     ) {

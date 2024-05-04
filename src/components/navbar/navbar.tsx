@@ -14,9 +14,10 @@ import {
   CART_BASE_URL,
 } from "@/routes/routes";
 import Image from "next/image";
+import { useAppContext } from "@/contexts/app-context";
 export function StickyNavbar() {
   const [openNav, setOpenNav] = React.useState(false);
-
+  const { openLoginForm, openSignUpForm } = useAppContext();
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -75,6 +76,7 @@ export function StickyNavbar() {
 
             <div className="flex items-center gap-x-1">
               <Button
+                onClick={openLoginForm}
                 variant="text"
                 size="sm"
                 className="hidden lg:inline-block"
@@ -82,6 +84,7 @@ export function StickyNavbar() {
                 <span>Log In</span>
               </Button>
               <Button
+                onClick={openSignUpForm}
                 variant="gradient"
                 size="sm"
                 className="hidden lg:inline-block"

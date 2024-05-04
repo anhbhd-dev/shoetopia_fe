@@ -7,6 +7,7 @@ export type CategoryParamsType = {
   limit?: number;
   sortBy?: string;
   orderBy?: string;
+  isShowAtHomePage?: boolean;
 };
 
 const DEFAULT_CATEGORY_PARAMS: CategoryParamsType = {

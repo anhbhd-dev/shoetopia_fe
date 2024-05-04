@@ -1,4 +1,5 @@
 "use client";
+import { Product } from "@/types/product.type";
 import { formatMoney } from "@/utils/format-money";
 import {
   Button,
@@ -8,11 +9,18 @@ import {
 } from "@material-tailwind/react";
 import React from "react";
 
-export default function ProductDetailsInfo() {
+export type ProductDetailsInfoProps = {
+  productDetails: Product | undefined;
+};
+
+export default function ProductDetailsInfo({
+  productDetails,
+}: ProductDetailsInfoProps) {
+  const [currentVariation, setCurrentVariation] = React.useState(0);
   return (
     <div>
-      <Typography variant="h2" className="lg:min-h-20">
-        This is product name
+      <Typography variant="h3" className="mb-6">
+        {productDetails?.name}
       </Typography>
       <Typography className="text-base lg:mb-2">Giá bán</Typography>
       <div className="flex gap-10">
@@ -26,16 +34,15 @@ export default function ProductDetailsInfo() {
       <div>
         <Typography className="text-base lg:mt-5 lg:mb-4">Kích cỡ</Typography>
         <div className="flex flex-wrap lg:gap-4">
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
-          <IconButton variant="outlined">42</IconButton>
+          {productDetails?.variations.map((variation) => (
+            <IconButton
+              key={variation._id}
+              variant="outlined"
+              disabled={variation.availableQuantity === 0}
+            >
+              {variation.size}
+            </IconButton>
+          ))}
         </div>
       </div>
       <div>

@@ -1,12 +1,22 @@
 import { Variation } from "../types/variation.type";
 import axiosInstance from "./axios-initial";
 
+export const fetchVariationNames = async (): Promise<string[]> => {
+  try {
+    const response = await axiosInstance.get(
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/variations/all/names`
+    );
+    return response.data;
+  } catch (error) {
+    // Xử lý lỗi
+    throw new Error(error as string);
+  }
+};
+
 export const fetchVariationById = async (id: string): Promise<Variation> => {
   try {
     const response = await axiosInstance.get(
-      `http://${
-        import.meta.env.VITE_BASE_API_ENDPOINT
-      }/api/v1/admin/variations/${id}`
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/variations/${id}`
     );
     return response.data;
   } catch (error) {
@@ -25,9 +35,7 @@ export type CreateVariationType = {
 export const createVariation = async (variationData: CreateVariationType) => {
   try {
     const response = await axiosInstance.post(
-      `http://${
-        import.meta.env.VITE_BASE_API_ENDPOINT
-      }/api/v1/admin/variations`,
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/variations`,
       variationData
     );
     return response.data;
@@ -41,9 +49,7 @@ export type UpdateVariationType = Partial<CreateVariationType> & {
 };
 export const updateVariation = async (data: UpdateVariationType) => {
   const response = await axiosInstance.put(
-    `http://${import.meta.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/variations/${
-      data._id
-    }`,
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/variations/${data._id}`,
     data
   );
 
@@ -53,16 +59,13 @@ export const updateVariation = async (data: UpdateVariationType) => {
   throw new Error("Failed to update category");
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DeleteVariationPayloadType = {
   id: string;
   productId: string;
 };
 export const deleteVariation = async (payload: DeleteVariationPayloadType) => {
   const response = await axiosInstance.delete(
-    `http://${import.meta.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/variations/${
-      payload.id
-    }`,
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/variations/${payload.id}`,
     { data: { productId: payload.productId } }
   );
 

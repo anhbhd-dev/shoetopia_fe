@@ -1,3 +1,4 @@
+import { FilterAndSortProductsType } from "@/app/products/page";
 import { OrderBy, SortBy } from "../enum/sort.enum";
 import { Product, ProductFormType } from "../types/product.type";
 import axiosInstance from "./axios-initial";
@@ -10,11 +11,11 @@ export type ProductParamsType = {
   isHot?: boolean;
   sortBy?: string;
   orderBy?: string;
-};
+} & FilterAndSortProductsType;
 
 const DEFAULT_CATEGORY_PARAMS: ProductParamsType = {
   page: 1,
-  limit: 5,
+  limit: 6,
   sortBy: SortBy.CREATED_AT,
   orderBy: OrderBy.DESC,
 };
@@ -37,12 +38,12 @@ export const fetchProducts = async (queryParams?: ProductParamsType) => {
 export const fetchProductById = async (id: string): Promise<Product> => {
   try {
     const response = await axiosInstance.get(
-      `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/products/${id}`
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/products/${id}`
     );
     return response.data;
   } catch (error) {
     // Xử lý lỗi
-    throw new Error(error as string);
+    throw error;
   }
 };
 
@@ -64,7 +65,7 @@ export type UpdateProductDataType = Partial<ProductFormType> & {
 };
 export const updateProduct = async (data: UpdateProductDataType) => {
   const response = await axiosInstance.put(
-    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/products/${data.productId}`,
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/products/${data.productId}`,
     data
   );
 
@@ -84,35 +85,3 @@ export const deleteProduct = async (id: string) => {
   }
   throw new Error("Failed to delete product");
 };
-
-export interface ProductFetched {
-  _id?: string;
-  name?: string;
-  description?: string;
-  isHot?: boolean;
-  avatar?: string;
-  images?: string[];
-  category?: Category;
-  isActive?: boolean;
-  variations?: Variation[];
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface Category {
-  _id?: string;
-  name?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  isShowAtHomePage?: boolean;
-}
-
-export interface Variation {
-  _id?: string;
-  size?: string;
-  unitPrice?: number;
-  salePrice?: number;
-  availableQuantity?: number;
-  createdAt?: string;
-  updatedAt?: string;
-}

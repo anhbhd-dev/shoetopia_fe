@@ -5,6 +5,7 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
+import { Product } from "@/types/product.type";
 
 function Icon({ id, open }) {
   return (
@@ -26,8 +27,12 @@ function Icon({ id, open }) {
     </svg>
   );
 }
-
-export function DescriptionAndReview() {
+export type DescriptionAndReviewProps = {
+  productDetails: Product | undefined;
+};
+export function DescriptionAndReview({
+  productDetails,
+}: DescriptionAndReviewProps) {
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value) => setOpen(open === value ? 0 : value);
@@ -38,12 +43,7 @@ export function DescriptionAndReview() {
         <AccordionHeader onClick={() => handleOpen(1)}>
           Mô tả sản phẩm
         </AccordionHeader>
-        <AccordionBody>
-          We&apos;re not always in the position that we want to be at.
-          We&apos;re constantly growing. We&apos;re constantly making mistakes.
-          We&apos;re constantly trying to express ourselves and actualize our
-          dreams.
-        </AccordionBody>
+        <AccordionBody>{productDetails?.description}</AccordionBody>
       </Accordion>
       <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
         <AccordionHeader onClick={() => handleOpen(2)}>

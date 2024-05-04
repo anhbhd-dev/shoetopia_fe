@@ -2,27 +2,44 @@
 import React from "react";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { FilterAndSortProductsType } from "@/app/products/page";
 
-export function PLPPagination() {
-  const [active, setActive] = React.useState(1);
+export type PLPPaginationProps = {
+  filterProductsPage?: FilterAndSortProductsType;
+  setFilterProductsPage: React.Dispatch<
+    React.SetStateAction<FilterAndSortProductsType>
+  >;
+};
 
-  const getItemProps = (index: number) =>
+export function PLPPagination({
+  filterProductsPage,
+  setFilterProductsPage,
+}: PLPPaginationProps) {
+  const getItemProps = (pageNumber: number) =>
     ({
-      variant: active === index ? "filled" : "text",
+      variant:
+        filterProductsPage?.currentPage === pageNumber ? "filled" : "text",
       color: "gray",
-      onClick: () => setActive(index),
+      onClick: () =>
+        setFilterProductsPage((prev) => ({ ...prev, currentPage: pageNumber })),
     } as any);
 
   const next = () => {
-    if (active === 5) return;
+    if (filterProductsPage?.currentPage === filterProductsPage?.totalPage)
+      return;
 
-    setActive(active + 1);
+    setFilterProductsPage((prev) => ({
+      ...prev,
+      currentPage: (prev.currentPage ?? 0) + 1,
+    }));
   };
-
   const prev = () => {
-    if (active === 1) return;
+    if (filterProductsPage?.currentPage === 1) return;
 
-    setActive(active - 1);
+    setFilterProductsPage((prev) => ({
+      ...prev,
+      currentPage: (prev.currentPage ?? 0) - 1,
+    }));
   };
 
   return (
@@ -31,22 +48,26 @@ export function PLPPagination() {
         variant="text"
         className="flex items-center gap-2"
         onClick={prev}
-        disabled={active === 1}
+        disabled={filterProductsPage?.currentPage === 1}
       >
         <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
       </Button>
       <div className="flex items-center gap-2">
-        <IconButton {...getItemProps(1)}>1</IconButton>
-        <IconButton {...getItemProps(2)}>2</IconButton>
-        <IconButton {...getItemProps(3)}>3</IconButton>
-        <IconButton {...getItemProps(4)}>4</IconButton>
-        <IconButton {...getItemProps(5)}>5</IconButton>
+        {Array.from({ length: filterProductsPage?.totalPage ?? 0 }).map(
+          (_, i) => (
+            <IconButton key={i} {...getItemProps(i + 1)}>
+              {i + 1}
+            </IconButton>
+          )
+        )}
       </div>
       <Button
         variant="text"
         className="flex items-center gap-2"
         onClick={next}
-        disabled={active === 5}
+        disabled={
+          filterProductsPage?.currentPage === filterProductsPage?.totalPage
+        }
       >
         Next
         <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />

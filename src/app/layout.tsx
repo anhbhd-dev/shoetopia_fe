@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { StickyNavbar } from "@/components/navbar/navbar";
 import Footer from "@/components/footer/footer";
+import { AppProvider } from "@/contexts/app-context";
+import LoginForm from "@/components/auth/login-form";
+import SignUpForm from "@/components/auth/signup-form";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <StickyNavbar />
-        <div style={{ minHeight: "70vh" }} className="lg:px-40">
-          {children}
-        </div>
-        <Footer />
+        <AppProvider>
+          <StickyNavbar />
+          <div style={{ minHeight: "70vh" }} className="lg:px-40">
+            {children}
+          </div>
+          <Footer />
+          <LoginForm />
+          <SignUpForm />
+        </AppProvider>
       </body>
     </html>
   );
