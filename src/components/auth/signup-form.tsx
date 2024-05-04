@@ -13,6 +13,9 @@ import {
 } from "@material-tailwind/react";
 import React from "react";
 import { useAppContext } from "@/contexts/app-context";
+import { register } from "@/services/auth.service";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 export function SignUpForm() {
   const [passwordShown, setPasswordShown] = useState(false);
@@ -22,7 +25,7 @@ export function SignUpForm() {
   const toggleConfirmPasswordVisibility = () =>
     setConfirmPasswordShown((cur) => !cur);
 
-  const { isOpenSignUpForm, closeSignUpForm } = useAppContext();
+  const { isOpenSignUpForm, closeSignUpForm, openLoginForm } = useAppContext();
 
   const formik = useFormik({
     initialValues: {
@@ -42,14 +45,49 @@ export function SignUpForm() {
         .nullable()
         .required("Bắt buộc xác nhận mật khẩu"),
     }),
-    onSubmit: (values) => {
-      // Handle form submission here
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const resSignUp = await register(values);
+        if (resSignUp) {
+          toast.success("Đăng ký thành công.", {
+            duration: 2000,
+            style: {
+              background: "#fff",
+            },
+            iconTheme: {
+              primary: "#61d345",
+              secondary: "#fff",
+            },
+          });
+        }
+        closeSignUpForm();
+      } catch (err) {
+        if (
+          (err as AxiosError | any).response?.data.statusCode === 400 &&
+          (err as AxiosError | any).response?.data.message ===
+            "User already exists"
+        ) {
+          return toast.error("Email đã được đăng ký trước đó.", {
+            duration: 2000,
+            style: {
+              background: "#fff",
+            },
+          });
+        }
+        toast.error("Đã có lỗi xảy ra.", {
+          duration: 2000,
+          style: {
+            background: "#fff",
+          },
+        });
+      } finally {
+        formik.setSubmitting(false);
+      }
     },
   });
 
   return (
-    <Dialog open={isOpenSignUpForm} handler={closeSignUpForm}>
+    <Dialog open={isOpenSignUpForm} size="xs" handler={closeSignUpForm}>
       <DialogBody>
         <section className="grid text-center items-center p-2 ">
           <div>
@@ -188,9 +226,15 @@ export function SignUpForm() {
                 className="mt-4 text-center font-normal"
               >
                 Đã có tài khoản?{" "}
-                <a href="#" className="font-medium text-gray-900">
+                <span
+                  onClick={() => {
+                    closeSignUpForm();
+                    openLoginForm();
+                  }}
+                  className="font-medium text-gray-900 cursor-pointer"
+                >
                   Đăng nhập
-                </a>
+                </span>
               </Typography>
             </form>
           </div>

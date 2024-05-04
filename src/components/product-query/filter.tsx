@@ -1,7 +1,8 @@
 "use client";
+import { FilterAndSortProductsType } from "@/app/products/page";
 import { Category } from "@/types/product.type";
 import { Checkbox, Input, Select, Option } from "@material-tailwind/react";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 export type FilterPLPType = {
   variationNames?: string[];
   categoriesData?: {
@@ -14,18 +15,24 @@ export type FilterPLPType = {
       page: number;
     }>
   >;
+  setFilterProductsPage: Dispatch<SetStateAction<FilterAndSortProductsType>>;
 };
 
 export default function FilterPLP({
   categoriesData,
   variationNames,
+  setFilterProductsPage,
   setCategoriesData,
 }: FilterPLPType) {
+  const handleChangeKeywords = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterProductsPage((prev) => ({ ...prev, name: e.target.value }));
+  };
+
   return (
     <div className="overflow-hidden">
       <div className="lg:mb-10 ml-2">
         <p className="text-xl font-bold lg:mb-5 mb-2">Tìm kiếm</p>
-        <Input label="Nhập từ khoá..." />
+        <Input onChange={handleChangeKeywords} label="Nhập từ khoá..." />
       </div>
       <p className="ml-2 text-xl font-bold lg:mb-5 mb-2">Danh mục</p>
 

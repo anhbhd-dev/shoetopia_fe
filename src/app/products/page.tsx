@@ -27,7 +27,7 @@ export type FilterAndSortProductsType = {
 
 export default function ProductsListing() {
   const [products, setProducts] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [filterProductsPage, setFilterProductsPage] =
     useState<FilterAndSortProductsType>({
       currentPage: 1,
@@ -73,6 +73,7 @@ export default function ProductsListing() {
   }, [categoriesData.page]);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchAllProducts = async () => {
       const data = await fetchProducts(filterProductsPage);
       setProducts(data.products);
@@ -81,6 +82,7 @@ export default function ProductsListing() {
         totalPage: data.totalPage,
         totalDocs: data.totalDocs,
       });
+      setIsLoading(false);
     };
     fetchAllProducts();
 
@@ -105,6 +107,7 @@ export default function ProductsListing() {
           </div>
 
           <FilterPLP
+            setFilterProductsPage={setFilterProductsPage}
             variationNames={variationNames}
             categoriesData={categoriesData as any}
             setCategoriesData={setCategoriesData as any}
@@ -114,7 +117,7 @@ export default function ProductsListing() {
           <div className="lg:mb-10 min-h-10 flex justify-end">
             <SelectSortByPLP />
           </div>
-          {!products?.length && <CardPlaceHolderSkeleton />}
+          {isLoading && <CardPlaceHolderSkeleton />}
           <ProductsResultListing productsList={products} />
           {products?.length > 0 && (
             <PLPPagination

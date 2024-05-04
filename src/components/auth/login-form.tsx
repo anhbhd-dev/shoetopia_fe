@@ -25,7 +25,7 @@ export type LoginSuccessResponse = {
 export function LoginForm() {
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisibility = () => setPasswordShown((cur) => !cur);
-  const { isOpenLoginForm, closeLoginForm } = useAppContext();
+  const { isOpenLoginForm, closeLoginForm, openSignUpForm } = useAppContext();
   const { setUser, user } = useAuthContext();
   const handleSubmitForm = async (values: UserLoginFormType) => {
     try {
@@ -106,7 +106,7 @@ export function LoginForm() {
   });
 
   return (
-    <Dialog open={isOpenLoginForm} handler={closeLoginForm}>
+    <Dialog open={isOpenLoginForm} size="xs" handler={closeLoginForm}>
       <DialogBody>
         <section className="grid text-center items-center p-2 ">
           <div>
@@ -220,9 +220,15 @@ export function LoginForm() {
                 className="mt-4 text-center font-normal"
               >
                 Chưa có tài khoản?{" "}
-                <a href="#" className="font-medium text-gray-900">
+                <span
+                  onClick={() => {
+                    closeLoginForm();
+                    openSignUpForm();
+                  }}
+                  className="font-medium text-gray-900 cursor-pointer"
+                >
                   Đăng ký
-                </a>
+                </span>
               </Typography>
             </form>
           </div>
