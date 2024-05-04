@@ -18,12 +18,15 @@ export default function ProductsResultListing({
   productsList,
 }: ProductsResultListingProps) {
   return (
-    <div className="grid grid-cols-3 gap-4 gap-y-10">
-      {productsList?.length > 0 &&
-        productsList.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
-    </div>
+    <>
+      <div className="grid grid-cols-3 gap-4 gap-y-10">
+        {productsList?.length > 0 &&
+          productsList.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+      </div>
+      {productsList.length === 0 && <NoProducts />}
+    </>
   );
 }
 
@@ -69,4 +72,12 @@ export function CardPlaceHolderSkeleton() {
     </Card>
   ));
   return <div className="grid grid-cols-3">{skeleton}</div>;
+}
+
+function NoProducts() {
+  return (
+    <div className="text-center w-full mt-20">
+      Không có sản phẩm nào tương ứng
+    </div>
+  );
 }

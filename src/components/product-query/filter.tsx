@@ -1,8 +1,9 @@
 "use client";
 import { FilterAndSortProductsType } from "@/app/products/page";
+import { useDebounce } from "@/hooks/useDebounce";
 import { Category } from "@/types/product.type";
 import { Checkbox, Input, Select, Option } from "@material-tailwind/react";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 export type FilterPLPType = {
   variationNames?: string[];
   categoriesData?: {
@@ -16,6 +17,7 @@ export type FilterPLPType = {
     }>
   >;
   setFilterProductsPage: Dispatch<SetStateAction<FilterAndSortProductsType>>;
+  setIsLoadingProducts: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function FilterPLP({
@@ -23,10 +25,68 @@ export default function FilterPLP({
   variationNames,
   setFilterProductsPage,
   setCategoriesData,
+  setIsLoadingProducts,
 }: FilterPLPType) {
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+  // const [selectedVariationNames, setSelectedVariationNames] = useState<string[]>([]);
+
+  const debouncedSelectedCategoryIds = useDebounce(selectedCategoryIds, 500); // Trì hoãn 500ms
+  const debouncedSearchKeyword = useDebounce(searchKeyword, 500); // Trì hoãn 500ms
+  const [priceRange, setPriceRange] = useState<{
+    minPrice?: number;
+    maxPrice?: number;
+  }>({
+    minPrice: undefined,
+    maxPrice: undefined,
+  });
+
+  const debouncedPriceRange = useDebounce(priceRange, 500);
+  useEffect(() => {
+    // Thực hiện tác vụ tìm kiếm khi debouncedSearchKeyword thay đổi
+    setFilterProductsPage((prev) => ({
+      ...prev,
+      name: debouncedSearchKeyword,
+    }));
+  }, [debouncedSearchKeyword, setFilterProductsPage]);
+
   const handleChangeKeywords = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterProductsPage((prev) => ({ ...prev, name: e.target.value }));
+    setSearchKeyword(e.target.value);
+    setIsLoadingProducts(true);
   };
+
+  useEffect(() => {
+    setFilterProductsPage((prev) => ({
+      ...prev,
+      minPrice: debouncedPriceRange.minPrice,
+      maxPrice: debouncedPriceRange.maxPrice,
+    }));
+  }, [debouncedPriceRange, setFilterProductsPage, setIsLoadingProducts]);
+
+  const handleChangePriceRange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPriceRange({
+      ...priceRange,
+      [e.target.name]: e.target.value,
+    });
+    setIsLoadingProducts(true);
+  };
+
+  const handleChangeCategories = (categoryId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedCategoryIds([...selectedCategoryIds, categoryId]);
+    } else {
+      setSelectedCategoryIds(
+        selectedCategoryIds.filter((id) => id !== categoryId)
+      );
+    }
+    setIsLoadingProducts(true);
+  };
+  useEffect(() => {
+    setFilterProductsPage((prev) => ({
+      ...prev,
+      categories: debouncedSelectedCategoryIds.join(","),
+    }));
+  }, [debouncedSelectedCategoryIds, setFilterProductsPage]);
 
   return (
     <div className="overflow-hidden">
@@ -44,14 +104,30 @@ export default function FilterPLP({
               {category.name}
             </p>
           }
+          checked={selectedCategoryIds.includes(category._id)}
+          onChange={(e) =>
+            handleChangeCategories(category._id, e.currentTarget.checked)
+          }
         />
       ))}
 
       <div className="lg:mb-10 ml-2">
         <p className="text-xl font-bold lg:mb-5 mb-2 mt-5">Khoảng giá</p>
         <div className="flex flex-col gap-4 lg:w-20 lg:mt-8">
-          <Input variant="static" label="Giá tối thiểu" placeholder="0" />
-          <Input variant="static" label="Giá tối đa" placeholder="20000" />
+          <Input
+            variant="static"
+            name="minPrice"
+            label="Giá tối thiểu"
+            placeholder="0"
+            onChange={handleChangePriceRange}
+          />
+          <Input
+            variant="static"
+            name="maxPrice"
+            label="Giá tối đa"
+            placeholder="200000"
+            onChange={handleChangePriceRange}
+          />
         </div>
       </div>
       <div>

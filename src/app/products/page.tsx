@@ -27,7 +27,7 @@ export type FilterAndSortProductsType = {
 
 export default function ProductsListing() {
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [filterProductsPage, setFilterProductsPage] =
     useState<FilterAndSortProductsType>({
       currentPage: 1,
@@ -73,7 +73,7 @@ export default function ProductsListing() {
   }, [categoriesData.page]);
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoadingProducts(true);
     const fetchAllProducts = async () => {
       const data = await fetchProducts(filterProductsPage);
       setProducts(data.products);
@@ -82,7 +82,7 @@ export default function ProductsListing() {
         totalPage: data.totalPage,
         totalDocs: data.totalDocs,
       });
-      setIsLoading(false);
+      setIsLoadingProducts(false);
     };
     fetchAllProducts();
 
@@ -97,6 +97,7 @@ export default function ProductsListing() {
     filterProductsPage.sortBy,
     filterProductsPage.orderBy,
   ]);
+
   return (
     <div className="mt-20">
       <div className="grid grid-cols-4 gap-8">
@@ -107,6 +108,7 @@ export default function ProductsListing() {
           </div>
 
           <FilterPLP
+            setIsLoadingProducts={setIsLoadingProducts}
             setFilterProductsPage={setFilterProductsPage}
             variationNames={variationNames}
             categoriesData={categoriesData as any}
@@ -115,10 +117,16 @@ export default function ProductsListing() {
         </div>
         <div className="col-span-3">
           <div className="lg:mb-10 min-h-10 flex justify-end">
-            <SelectSortByPLP />
+            <SelectSortByPLP
+              setFilterProductsPage={setFilterProductsPage}
+              setIsLoadingProducts={setIsLoadingProducts}
+            />
           </div>
-          {isLoading && <CardPlaceHolderSkeleton />}
-          <ProductsResultListing productsList={products} />
+          {isLoadingProducts ? (
+            <CardPlaceHolderSkeleton />
+          ) : (
+            <ProductsResultListing productsList={products} />
+          )}
           {products?.length > 0 && (
             <PLPPagination
               filterProductsPage={filterProductsPage}
