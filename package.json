@@ -13,11 +13,13 @@
     "@material-tailwind/react": "^2.1.0",
     "antd": "^5.16.5",
     "axios": "^1.6.8",
+    "formik": "^2.4.6",
     "keen-slider": "^6.8.6",
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-hot-toast": "^2.4.1"
+    "react-hot-toast": "^2.4.1",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -4,7 +4,7 @@ import axiosInstance from "./axios-initial";
 export const fetchUserProfile = async (): Promise<User | undefined> => {
   try {
     const response = await axiosInstance.get(
-      `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/users/profile`
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/users/profile`
     );
     return response.data;
   } catch (error) {
@@ -12,17 +12,6 @@ export const fetchUserProfile = async (): Promise<User | undefined> => {
   }
 };
 
-export type UserLoginFormType = {
-  email: string;
-  password: string;
-};
-export const login = async (loginData: UserLoginFormType) => {
-  const response = await axiosInstance.post(
-    `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/auth/admin/login`,
-    loginData
-  );
-  return response.data;
-};
 export type updatePasswordType = {
   password: string;
   newPassword: string;
@@ -31,7 +20,7 @@ export type updatePasswordType = {
 
 export const updateUserPassword = async (data: updatePasswordType) => {
   const response = await axiosInstance.put(
-    `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/users/password/${data._id}`,
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/users/password/${data._id}`,
     data
   );
 
@@ -44,7 +33,7 @@ export type DeleteVariationPayloadType = {
 };
 export const deleteVariation = async (payload: DeleteVariationPayloadType) => {
   const response = await axiosInstance.delete(
-    `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/variations/${payload.id}`,
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/variations/${payload.id}`,
     { data: { productId: payload.productId } }
   );
 

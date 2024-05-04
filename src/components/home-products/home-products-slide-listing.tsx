@@ -1,7 +1,7 @@
 "use client";
 import SlideProductsListing from "@/components/home-products/slide-product-listing";
-import { fetchHomeCategories } from "@/services/category-services";
-import { fetchProducts } from "@/services/product-services";
+import { fetchHomeCategories } from "@/services/category.service";
+import { fetchProducts } from "@/services/product.service";
 import { Category } from "@/types/product.type";
 import { useEffect, useState } from "react";
 export default function HomeProductsSlideListing() {

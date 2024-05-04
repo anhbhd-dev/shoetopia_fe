@@ -6,6 +6,8 @@ import Footer from "@/components/footer/footer";
 import { AppProvider } from "@/contexts/app-context";
 import LoginForm from "@/components/auth/login-form";
 import SignUpForm from "@/components/auth/signup-form";
+import { AuthProvider } from "@/contexts/auth-context";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,13 +25,35 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AppProvider>
-          <StickyNavbar />
-          <div style={{ minHeight: "70vh" }} className="lg:px-40">
-            {children}
-          </div>
-          <Footer />
-          <LoginForm />
-          <SignUpForm />
+          <AuthProvider>
+            <StickyNavbar />
+            <div style={{ minHeight: "70vh" }} className="lg:px-40">
+              <Toaster
+                position="top-center"
+                containerStyle={{ zIndex: 99999 }}
+                toastOptions={{
+                  success: {
+                    style: {
+                      background: "lightblue",
+                    },
+                    iconTheme: {
+                      primary: "white",
+                      secondary: "black",
+                    },
+                  },
+                  error: {
+                    style: {
+                      background: "palevioletred",
+                    },
+                  },
+                }}
+              />
+              {children}
+            </div>
+            <Footer />
+            <LoginForm />
+            <SignUpForm />
+          </AuthProvider>
         </AppProvider>
       </body>
     </html>

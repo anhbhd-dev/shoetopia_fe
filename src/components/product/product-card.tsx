@@ -1,4 +1,5 @@
 "use client";
+import { PRODUCTS_LIST_BASE_URL } from "@/routes/routes";
 import { Product } from "@/types/product.type";
 import { formatMoney } from "@/utils/format-money";
 import {
@@ -8,6 +9,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import Image from "next/image";
+import Link from "next/link";
 export type ProductCardType = {
   product: Product;
 };
@@ -29,12 +31,14 @@ export function ProductCard({ product }: ProductCardType) {
       </div>
       <CardBody className="p-4">
         <div className="mb-3 flex items-center justify-between ">
-          <Typography
-            color="blue-gray"
-            className="font-medium text-base text-ellipsis whitespace-nowrap overflow-hidden max-w-44"
-          >
-            {product?.name}
-          </Typography>
+          <Link href={`${PRODUCTS_LIST_BASE_URL}/${product?._id}`}>
+            <Typography
+              color="blue-gray"
+              className="font-medium text-base text-ellipsis whitespace-nowrap overflow-hidden max-w-44"
+            >
+              {product?.name}
+            </Typography>
+          </Link>
           <Typography
             color="blue-gray"
             className="flex items-center gap-1.5 font-normal"

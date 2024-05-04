@@ -2,7 +2,7 @@
 import { DescriptionAndReview } from "@/components/product-details/description-and-review";
 import { ProductDetailsImages } from "@/components/product-details/product-details-images";
 import ProductDetailsInfo from "@/components/product-details/product-details-info";
-import { fetchProductById } from "@/services/product-services";
+import { fetchProductById } from "@/services/product.service";
 import { Product } from "@/types/product.type";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";

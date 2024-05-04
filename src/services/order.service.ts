@@ -26,7 +26,7 @@ export const fetchOrders = async (queryParams?: OrderParamsType) => {
     const mergedParams = { ...DEFAULT_CATEGORY_PARAMS, ...queryParams };
 
     const response = await axiosInstance.get(
-      `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/orders`,
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/orders`,
       { params: mergedParams }
     );
     return response.data;
@@ -39,7 +39,7 @@ export const fetchOrders = async (queryParams?: OrderParamsType) => {
 export const fetchOrderById = async (id: string): Promise<Order> => {
   try {
     const response = await axiosInstance.get(
-      `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/orders/${id}`
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/orders/${id}`
     );
     return response.data;
   } catch (error) {
@@ -51,7 +51,7 @@ export const fetchOrderById = async (id: string): Promise<Order> => {
 export const createProduct = async (productData: ProductFormType) => {
   try {
     const response = await axiosInstance.post(
-      `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/products`,
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/products`,
       productData
     );
     return response.data;
@@ -70,7 +70,7 @@ export type UpdateOrderDto = {
 
 export const updateOrder = async (data: UpdateOrderDto) => {
   const response = await axiosInstance.put(
-    `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/orders/${data.orderId}`,
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/orders/${data.orderId}`,
     data
   );
 
@@ -82,7 +82,7 @@ export const updateOrder = async (data: UpdateOrderDto) => {
 
 export const deleteProduct = async (id: string) => {
   const response = await axiosInstance.delete(
-    `http://${process.env.VITE_BASE_API_ENDPOINT}/api/v1/admin/products/${id}`
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/products/${id}`
   );
 
   if (response.status === 200) {

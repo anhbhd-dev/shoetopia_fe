@@ -1,5 +1,15 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
-
+"use client";
+import { fetchUserProfile } from "@/services/user.service";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useAppContext } from "./app-context";
 export type UserData = {
   isAuthenticated: boolean;
   _id: string;
@@ -33,11 +43,10 @@ export type AuthContextProps = {
 };
 
 export const AuthProvider = ({ children }: AuthContextProps) => {
-  //   const navigate = useNavigate();
-  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
-  //   const toast = useToast();
+  const router = useRouter();
 
-  //   const { pathname } = useLocation();
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
   const [user, setUser] = useState<UserData>({
     isAuthenticated: false,
     _id: "",
@@ -48,8 +57,8 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
   });
 
   const logout = async () => {
-    localStorage.removeItem("adminAccessToken");
-    localStorage.removeItem("adminRefreshToken");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     setUser({
       isAuthenticated: false,
       _id: "",
@@ -58,42 +67,45 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
       email: "",
       roles: [],
     });
-    // toast({
-    //   title: "Đăng xuất thành công",
-    //   status: "success",
-    //   duration: 1500,
-    //   isClosable: true,
-    // });
-    // navigate("admin/auth/login");
+    toast.success("Đăng xuất thành công!", {
+      duration: 2000,
+      position: "top-right",
+    });
+    router.push("/");
   };
-  //   useEffect(() => {
-  //     const getUser = async () => {
-  //       try {
-  //         setIsAuthenticating(true);
-  //         const userData = await fetchUserProfile();
-  //         if (userData) {
-  //           setUser({
-  //             isAuthenticated: true,
-  //             ...userData,
-  //           });
-  //         }
-  //       } catch (err) {
-  //         if (pathname !== "/admin/auth/login") {
-  //           toast({
-  //             title: "Vui lòng đăng nhập lại",
-  //             description: (err as Error).message, // Ép kiểu err thành Error
-  //             status: "warning",
-  //             duration: 1500,
-  //             isClosable: true,
-  //           });
-  //         }
-  //         navigate("admin/auth/login");
-  //       }
-  //       setIsAuthenticating(false);
-  //     };
 
-  //     getUser();
-  //   }, [navigate, pathname, toast]);
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        setIsAuthenticating(true);
+        const userData = await fetchUserProfile();
+        if (userData) {
+          setUser({
+            isAuthenticated: true,
+            ...userData,
+          });
+        }
+      } catch (err) {
+        setIsError(true);
+      }
+      setIsAuthenticating(false);
+    };
+    getUser();
+  }, []);
+
+  useEffect(() => {
+    if (isError) {
+      toast("Bạn chưa đăng nhập!", {
+        duration: 2000,
+        icon: "🖐",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
+  }, [isError]);
 
   const valueToShare = {
     isAuthenticating,
@@ -102,11 +114,16 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
     logout,
   };
 
-  if (isAuthenticating) return null;
-
   return (
     <AuthContext.Provider value={valueToShare}>{children}</AuthContext.Provider>
   );
+};
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within a AuthProvider");
+  }
+  return context;
 };
 
 export default AuthContext;

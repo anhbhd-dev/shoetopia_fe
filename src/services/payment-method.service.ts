@@ -7,7 +7,7 @@ export type PaymentMethodParamsType = {
 export const fetchPaymentMethods = async () => {
   try {
     const response = await axiosInstance.get(
-      `http://${import.meta.env.VITE_BASE_API_ENDPOINT}/api/v1/payment-methods`
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/payment-methods`
     );
     return response.data;
   } catch (error) {
@@ -27,9 +27,7 @@ export const fetchPaymentMethodByName = async (
 ): Promise<PaymentMethod> => {
   try {
     const response = await axiosInstance.get(
-      `http://${
-        import.meta.env.VITE_BASE_API_ENDPOINT
-      }/api/v1/payment-methods/${name}`
+      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/payment-methods/${name}`
     );
     return response.data;
   } catch (error) {
@@ -44,7 +42,7 @@ export type UpdatePaymentMethodType = {
 };
 export const updatePaymentMethod = async (data: UpdatePaymentMethodType) => {
   const response = await axiosInstance.put(
-    `http://${import.meta.env.VITE_BASE_API_ENDPOINT}/api/v1/payment-methods`,
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/payment-methods`,
     data
   );
 

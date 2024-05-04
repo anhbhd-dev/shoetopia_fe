@@ -6,9 +6,9 @@ import ProductsResultListing, {
 } from "@/components/products-listing/product-listing";
 import { SelectSortByPLP } from "@/components/select/plp-sort-by";
 import { OrderBy, SortBy } from "@/enum/sort.enum";
-import { fetchCategories } from "@/services/category-services";
-import { fetchProducts } from "@/services/product-services";
-import { fetchVariationNames } from "@/services/variation-service";
+import { fetchCategories } from "@/services/category.service";
+import { fetchProducts } from "@/services/product.service";
+import { fetchVariationNames } from "@/services/variation.service";
 import { Category } from "@/types/category.type";
 import { useEffect, useState } from "react";
 
