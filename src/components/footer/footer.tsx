@@ -123,11 +123,6 @@ export default function Footer() {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center w-full py-4 mt-12 border-t border-blue-gray-50 md:flex-row md:justify-between">
-          <p className="block mb-4 font-sans text-sm antialiased font-normal leading-normal text-center text-blue-gray-900 md:mb-0">
-            © 2023{" "}
-            <a href="https://material-tailwind.com/">Material Tailwind</a>. All
-            Rights Reserved.
-          </p>
           <div className="flex gap-4 text-blue-gray-900 sm:justify-center">
             <a
               href="#"

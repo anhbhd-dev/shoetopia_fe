@@ -1,3 +1,4 @@
+import { CheckoutInfo } from "@/contexts/cart-context";
 import { OrderStatus } from "../enum/order";
 import { OrderBy, SortBy } from "../enum/sort.enum";
 import { Order } from "../types/order.type";
@@ -21,19 +22,14 @@ const DEFAULT_CATEGORY_PARAMS: OrderParamsType = {
   orderBy: OrderBy.DESC,
 };
 
-export const fetchOrders = async (queryParams?: OrderParamsType) => {
-  try {
-    const mergedParams = { ...DEFAULT_CATEGORY_PARAMS, ...queryParams };
+export const fetchUserOrders = async (queryParams?: OrderParamsType) => {
+  const mergedParams = { ...DEFAULT_CATEGORY_PARAMS, ...queryParams };
 
-    const response = await axiosInstance.get(
-      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/orders`,
-      { params: mergedParams }
-    );
-    return response.data;
-  } catch (error) {
-    // Xử lý lỗi
-    throw new Error(error as string);
-  }
+  const response = await axiosInstance.get(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/orders`,
+    { params: mergedParams }
+  );
+  return response.data;
 };
 
 export const fetchOrderById = async (id: string): Promise<Order> => {
@@ -48,17 +44,12 @@ export const fetchOrderById = async (id: string): Promise<Order> => {
   }
 };
 
-export const createProduct = async (productData: ProductFormType) => {
-  try {
-    const response = await axiosInstance.post(
-      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/products`,
-      productData
-    );
-    return response.data;
-  } catch (error) {
-    // Xử lý lỗi
-    throw new Error(error as string);
-  }
+export const createOrder = async (checkoutInfo: CheckoutInfo) => {
+  const response = await axiosInstance.post(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/orders/create`,
+    checkoutInfo
+  );
+  return response.data;
 };
 
 export type UpdateOrderDto = {

@@ -7,7 +7,13 @@ import {
   removeItemFromUserCart,
 } from "@/services/cart.service";
 import { CartAction, CartActionType, CartState } from "@/types/cart";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { useAuthContext } from "./auth-context";
 import { PaymentMethod, PaymentStatus } from "@/enum/order";
 
@@ -34,19 +40,22 @@ export type Payment = {
   paymentMethod?: PaymentMethod;
   paymentStatus?: PaymentStatus;
 };
-
+export type CheckoutInfo = {
+  receiverName?: string;
+  phoneNumber?: string;
+  shippingAddress?: string;
+  payment?: Payment;
+};
 export const CartContext = createContext<{
   cart: CartState;
   addToCart: (item: { variationId: string; quantity: number }) => void;
   decreaseCartItem?: (item: { variationId: string; quantity?: number }) => void;
   removeFromCart: (item: RemoveFromCartPayloadType) => void;
   clearCart?: () => void;
-  fetchCart?: () => void;
+  fetchCart: () => void;
   updateCart?: (updatedCart: CartState) => void;
-  receiverName?: string;
-  phoneNumber?: string;
-  shippingAddress?: string;
-  payment?: Payment;
+  setCheckOutInformation: (checkOutInformation: CheckoutInfo) => void;
+  checkOutInformation?: CheckoutInfo;
 }>({
   cart: initialState,
   addToCart: () => {},
@@ -55,10 +64,13 @@ export const CartContext = createContext<{
   clearCart: () => {},
   fetchCart: () => {},
   updateCart: () => {},
-  receiverName: "",
-  phoneNumber: "",
-  shippingAddress: "",
-  payment: {},
+  setCheckOutInformation: () => {},
+  checkOutInformation: {
+    receiverName: "",
+    phoneNumber: "",
+    shippingAddress: "",
+    payment: {},
+  },
 });
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -66,6 +78,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const { user } = useAuthContext();
   const [cart, dispatch] = useReducer(cartReducer, initialState);
+
+  const [checkOutInformation, setCheckOutInformation] = useState<CheckoutInfo>({
+    receiverName: "",
+    phoneNumber: "",
+    shippingAddress: "",
+    payment: {},
+  });
+
   const addToCart = async (item: AddToCartPayloadType) => {
     try {
       const cartDataResponse = await addToUserCart(item);
@@ -82,6 +102,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (user.isAuthenticated) {
       fetchCart();
+      setCheckOutInformation({
+        receiverName:
+          user.firstName && user.lastName
+            ? `${user.lastName} ${user.firstName}`
+            : "",
+        phoneNumber: user.phoneNumber ?? "",
+        shippingAddress: user.address ?? "",
+        payment: { paymentMethod: PaymentMethod.CASH_ON_DELIVERY },
+      });
     }
   }, [user]);
   const removeFromCart = async (item: RemoveFromCartPayloadType) => {
@@ -112,6 +141,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     removeFromCart,
     // clearCart,
     // updateCart,
+    checkOutInformation,
+    setCheckOutInformation,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

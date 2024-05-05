@@ -1,29 +1,29 @@
 import { Role } from "../enum/role";
 
 export interface Order {
-  _id: string;
-  user: User;
-  shippingAddress: string;
-  receiverName: string;
-  orderCode: string;
-  phoneNumber: string;
-  orderItems: OrderItem[];
-  totalPrice: number;
-  shippingFee: number;
-  shippingFeePercentage: number;
-  totalAmount: number;
-  orderStatus: string[];
-  payment: Payment;
-  createdAt: string;
-  updatedAt: string;
+  _id?: string;
+  user?: User;
+  shippingAddress?: string;
+  receiverName?: string;
+  orderCode?: string;
+  phoneNumber?: string;
+  orderItems?: OrderItem[];
+  totalPrice?: number;
+  shippingFee?: number;
+  shippingFeePercentage?: number;
+  totalAmount?: number;
+  orderStatus?: string[];
+  payment?: Payment;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface OrderItem {
-  variation: Variation;
-  price: number;
-  quantity: number;
-  _id: string;
-  product: Product;
+  variation?: Variation;
+  price?: number;
+  quantity?: number;
+  _id?: string;
+  product?: Product;
 }
 
 export interface Product {

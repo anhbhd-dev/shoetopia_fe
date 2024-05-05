@@ -1,17 +1,25 @@
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
+import { useCartContext } from "@/contexts/cart-context";
 import { PaymentMethod } from "@/enum/order";
+import Image from "next/image";
+import { useState } from "react";
 
 export default function PaymentMethodSelection() {
+  const { checkOutInformation, setCheckOutInformation } = useCartContext();
+
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     PaymentMethod.CASH_ON_DELIVERY
   );
-
   const handlePaymentMethodChange = (method: PaymentMethod) => {
     setSelectedPaymentMethod(method);
+    setCheckOutInformation({
+      ...checkOutInformation,
+      payment: {
+        ...checkOutInformation?.payment,
+        paymentMethod: method,
+      },
+    });
   };
-
   return (
     <div>
       <p className="mt-8 text-base font-medium">Phương thức thanh toán</p>

@@ -1,5 +1,6 @@
 "use client";
 import { useAuthContext } from "@/contexts/auth-context";
+import { useCartContext } from "@/contexts/cart-context";
 import { Button, Input } from "@material-tailwind/react";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
@@ -10,33 +11,42 @@ export default function CheckoutInfo() {
   const { user } = useAuthContext();
   const [isEditing, setIsEditing] = useState(false);
   const [clickResetForm, setClickResetForm] = useState(false);
+  const { checkOutInformation, setCheckOutInformation } = useCartContext();
+
   const validationSchema = Yup.object().shape({
     receiverName: Yup.string().required("Vui lòng nhập tên người nhận hàng"),
     email: Yup.string().email("Email không hợp lệ"),
     phoneNumber: Yup.string()
       .matches(/^[0-9]*$/, "Số điện thoại chỉ được chứa các chữ số")
       .min(10, "Số điện thoại phải có ít nhất 10 số"),
-    address: Yup.string().required("Vui lòng nhập địa chỉ giao hàng"),
+    shippingAddress: Yup.string().required("Vui lòng nhập địa chỉ giao hàng"),
   });
 
   const formik = useFormik({
     initialValues: {
-      receiverName: user.lastName + " " + user.firstName ?? "",
-      email: user.email ?? "",
-      phoneNumber: user.phoneNumber ?? "",
-      address: user.address ?? "",
+      receiverName: checkOutInformation?.receiverName,
+      email: user.email,
+      phoneNumber: checkOutInformation?.phoneNumber,
+      shippingAddress: checkOutInformation?.shippingAddress,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      setCheckOutInformation({
+        ...checkOutInformation,
+        ...values,
+      });
       setIsEditing(false);
     },
   });
 
   useEffect(() => {
-    formik.setFieldValue("receiverName", user.lastName + " " + user.firstName);
+    formik.setFieldValue("receiverName", checkOutInformation?.receiverName);
     formik.setFieldValue("email", user.email);
-    formik.setFieldValue("phoneNumber", user.phoneNumber);
-    formik.setFieldValue("address", user.address);
+    formik.setFieldValue("phoneNumber", checkOutInformation?.phoneNumber);
+    formik.setFieldValue(
+      "shippingAddress",
+      checkOutInformation?.shippingAddress
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, clickResetForm]);
   const handleCancel = () => {
@@ -86,6 +96,7 @@ export default function CheckoutInfo() {
           <div className="w-[500px] flex flex-col">
             {isEditing ? (
               <Input
+                disabled
                 name="email"
                 type="email"
                 value={formik.values.email}
@@ -126,25 +137,31 @@ export default function CheckoutInfo() {
 
         <div
           className={`flex gap-4 mt-8 ${
-            !formik.errors.address ? "items-center" : "items-start"
+            !formik.errors.shippingAddress ? "items-center" : "items-start"
           }`}
         >
           <p className="text-base font-medium min-w-44">Địa chỉ giao hàng</p>
           <div className="w-[500px] flex flex-col">
             {isEditing ? (
               <Input
-                name="address"
-                value={formik.values.address}
+                name="shippingAddress"
+                value={formik.values.shippingAddress}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={!!formik.touched.address && !!formik.errors.address}
+                error={
+                  !!formik.touched.shippingAddress &&
+                  !!formik.errors.shippingAddress
+                }
               />
             ) : (
-              <p>{formik.values.address}</p>
+              <p>{formik.values.shippingAddress}</p>
             )}
-            {formik.touched.address && formik.errors.address && (
-              <p className="text-red-500 mt-2 ">{formik.errors.address}</p>
-            )}
+            {formik.touched.shippingAddress &&
+              formik.errors.shippingAddress && (
+                <p className="text-red-500 mt-2 ">
+                  {formik.errors.shippingAddress}
+                </p>
+              )}
           </div>
         </div>
 

@@ -1,19 +1,50 @@
 "use client";
 import { useCartContext } from "@/contexts/cart-context";
 import { CHECKOUT_BASE_URL } from "@/routes/routes";
+import { createOrder } from "@/services/order.service";
 import { formatMoney } from "@/utils/format-money";
 import Button from "@material-tailwind/react/components/Button";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo } from "react";
+import toast from "react-hot-toast";
 
 export default function SubTotal() {
   const router = useRouter();
-  const { cart } = useCartContext();
+  const { cart, checkOutInformation, fetchCart } = useCartContext();
   const pathname = usePathname();
   const isOnCheckoutPage = useMemo(
     () => pathname.startsWith(CHECKOUT_BASE_URL),
     [pathname]
   );
+
+  const handlePlaceOrder = async () => {
+    if (checkOutInformation) {
+      try {
+        const orderResponse = await createOrder(checkOutInformation);
+        if (orderResponse) {
+          fetchCart();
+          toast.success("Đặt hàng thành công.", {
+            duration: 2000,
+            style: {
+              background: "#fff",
+            },
+            iconTheme: {
+              primary: "#61d345",
+              secondary: "#fff",
+            },
+          });
+          router.push("/");
+        }
+      } catch (err) {
+        toast.error("Đã có lỗi xảy ra.", {
+          duration: 2000,
+          style: {
+            background: "#fff",
+          },
+        });
+      }
+    }
+  };
 
   const handleGoToCheckoutPage = () => {
     router.push(CHECKOUT_BASE_URL);
@@ -43,9 +74,18 @@ export default function SubTotal() {
         </div>
       </div>
       {isOnCheckoutPage && (
-        <button className="mt-6 w-full rounded-md bg-black py-1.5 font-medium text-white hover:bg-blue-gray-900">
-          Thanh toán
-        </button>
+        <Button
+          onClick={handlePlaceOrder}
+          disabled={
+            !checkOutInformation?.receiverName ||
+            !checkOutInformation?.phoneNumber ||
+            !checkOutInformation?.shippingAddress ||
+            cart?.items?.length === 0
+          }
+          className="mt-6 w-full rounded-md  bg-black py-2 font-medium text-white hover:bg-blue-gray-900"
+        >
+          Đặt hàng
+        </Button>
       )}
       {!isOnCheckoutPage && (
         <Button
