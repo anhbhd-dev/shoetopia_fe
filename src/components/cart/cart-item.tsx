@@ -4,13 +4,15 @@ import { Image } from "antd";
 import { CartItem } from "@/types/cart";
 import { useCartContext } from "@/contexts/cart-context";
 import toast from "react-hot-toast";
+import Link from "next/link";
+import { PRODUCTS_LIST_BASE_URL } from "@/routes/routes";
 
 export type CartItemProps = {
   item?: CartItem;
 };
 export default function CartItemRow({ item }: CartItemProps) {
   const { removeFromCart } = useCartContext();
-
+  const [quantityInput, setQuantityInput] = React.useState(item?.quantity ?? 1);
   const handleRemoveItemFormCart = async () => {
     removeFromCart({ variationId: item?.variation?._id });
     toast.success("Đã xoá 1 item khỏi giỏ hàng.", {
@@ -26,6 +28,22 @@ export default function CartItemRow({ item }: CartItemProps) {
     });
   };
 
+  const handlePlusMinusQuantity = (value: number) => {
+    setQuantityInput((prev) => prev + value);
+  };
+
+  const handleChangeQuantityInput = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+
+    // Sử dụng regex để kiểm tra nếu là số và lớn hơn 0
+    if (/^[1-9][0-9]*$/.test(value)) {
+      // Chỉ thiết lập state nếu giá trị là số và lớn hơn 0
+      setQuantityInput(Number(value));
+    }
+  };
+
   return (
     <div className="justify-between mb-6 rounded-lg bg-white p-3 pr-5 shadow-md sm:flex sm:justify-start">
       <div className="w-[200px]">
@@ -39,7 +57,11 @@ export default function CartItemRow({ item }: CartItemProps) {
       </div>
       <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
         <div className="mt-5 flex flex-col justify-between sm:mt-0">
-          <h2 className="text-lg font-semibold text-gray-900">{item?.name}</h2>
+          <Link href={`${PRODUCTS_LIST_BASE_URL}/${item?.productId}`}>
+            <h2 className="text-lg font-semibold text-gray-900">
+              {item?.name}
+            </h2>
+          </Link>
           <p className="mt-1 text-xs text-gray-700">{item?.variation?.size}</p>
           <p className="text-sm">
             {formatMoney(item?.variation?.salePrice ?? 0)}
@@ -47,16 +69,23 @@ export default function CartItemRow({ item }: CartItemProps) {
         </div>
         <div className="mt-4 w-[160px] flex justify-between">
           <div className="flex items-center border-gray-100">
-            <button className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-black hover:text-blue-50">
+            <button
+              className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-black hover:text-blue-50"
+              onClick={() => handlePlusMinusQuantity(-1)}
+            >
               -
             </button>
             <input
               className="h-8 w-8 border bg-white text-center text-xs outline-none"
               type="text"
-              value="2"
+              onChange={handleChangeQuantityInput}
+              value={quantityInput}
               min="1"
             />
-            <button className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-black hover:text-blue-50">
+            <button
+              className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-black hover:text-blue-50"
+              onClick={() => handlePlusMinusQuantity(1)}
+            >
               +
             </button>
           </div>

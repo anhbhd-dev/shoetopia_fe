@@ -1,6 +1,6 @@
 "use client";
 import { fetchUserProfile } from "@/services/user.service";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   ReactNode,
   createContext,
@@ -8,8 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { useAppContext } from "./app-context";
+import toast from "react-hot-toast";
 export type UserData = {
   isAuthenticated: boolean;
   _id: string;
@@ -17,6 +16,10 @@ export type UserData = {
   lastName: string;
   email: string;
   roles: string[];
+  createdAt?: string;
+  updatedAt?: string;
+  phoneNumber?: string;
+  address?: string;
 };
 interface AuthContextData {
   isAuthenticating: boolean;

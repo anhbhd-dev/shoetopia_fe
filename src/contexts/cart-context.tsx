@@ -9,8 +9,9 @@ import {
 import { CartAction, CartActionType, CartState } from "@/types/cart";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { useAuthContext } from "./auth-context";
+import { PaymentMethod, PaymentStatus } from "@/enum/order";
 
-const initialState: CartState | undefined = {
+const initialState: CartState = {
   items: [],
   totalPrice: 0,
   shippingFee: 0,
@@ -29,6 +30,10 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return state;
   }
 };
+export type Payment = {
+  paymentMethod?: PaymentMethod;
+  paymentStatus?: PaymentStatus;
+};
 
 export const CartContext = createContext<{
   cart: CartState;
@@ -38,6 +43,10 @@ export const CartContext = createContext<{
   clearCart?: () => void;
   fetchCart?: () => void;
   updateCart?: (updatedCart: CartState) => void;
+  receiverName?: string;
+  phoneNumber?: string;
+  shippingAddress?: string;
+  payment?: Payment;
 }>({
   cart: initialState,
   addToCart: () => {},
@@ -46,6 +55,10 @@ export const CartContext = createContext<{
   clearCart: () => {},
   fetchCart: () => {},
   updateCart: () => {},
+  receiverName: "",
+  phoneNumber: "",
+  shippingAddress: "",
+  payment: {},
 });
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -53,7 +66,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const { user } = useAuthContext();
   const [cart, dispatch] = useReducer(cartReducer, initialState);
-
   const addToCart = async (item: AddToCartPayloadType) => {
     try {
       const cartDataResponse = await addToUserCart(item);

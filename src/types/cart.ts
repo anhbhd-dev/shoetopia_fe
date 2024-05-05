@@ -8,6 +8,7 @@ export type Cart = {
 
 export type CartItem = {
   _id?: string;
+  productId?: string;
   name?: string;
   description?: string;
   isHot?: boolean;

@@ -43,7 +43,7 @@ export default function SubTotal() {
         </div>
       </div>
       {isOnCheckoutPage && (
-        <button className="mt-6 w-full rounded-md bg-black py-1.5 font-medium text-blue-50 hover:bg-blue-gray-900">
+        <button className="mt-6 w-full rounded-md bg-black py-1.5 font-medium text-white hover:bg-blue-gray-900">
           Thanh toán
         </button>
       )}
@@ -51,7 +51,7 @@ export default function SubTotal() {
         <Button
           disabled={cart?.items?.length === 0}
           onClick={handleGoToCheckoutPage}
-          className="mt-6 w-full rounded-md bg-black py-3 font-medium text-blue-50 hover:bg-blue-gray-900"
+          className="mt-6 w-full rounded-md bg-black py-3 font-medium text-white hover:bg-blue-gray-900"
         >
           Tới trang thanh toán
         </Button>

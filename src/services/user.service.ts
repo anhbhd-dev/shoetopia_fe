@@ -12,6 +12,16 @@ export const fetchUserProfile = async (): Promise<User | undefined> => {
   }
 };
 
+export const updateUserInfo = async (
+  data: Partial<User>
+): Promise<User | undefined> => {
+  const response = await axiosInstance.put(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/users/${data._id}`,
+    data
+  );
+  return response.data;
+};
+
 export type updatePasswordType = {
   password: string;
   newPassword: string;
