@@ -1,5 +1,5 @@
 "use client";
-import { PROFILE_BASE_URL } from "@/routes/routes";
+import { ORDERS_LIST_BASE_URL, PROFILE_BASE_URL } from "@/routes/routes";
 import { ArchiveBoxIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { Card, List, ListItem, ListItemPrefix } from "@material-tailwind/react";
 import Link from "next/link";
@@ -16,12 +16,14 @@ export function ProfileSideBar() {
             Thông tin cá nhân
           </ListItem>
         </Link>
-        <ListItem>
-          <ListItemPrefix>
-            <ArchiveBoxIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Đơn hàng
-        </ListItem>
+        <Link href={ORDERS_LIST_BASE_URL}>
+          <ListItem>
+            <ListItemPrefix>
+              <ArchiveBoxIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Đơn hàng
+          </ListItem>
+        </Link>
       </List>
     </Card>
   );

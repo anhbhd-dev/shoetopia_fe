@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.ant-input-number-outlined:focus-within,
+.ant-input-number-outlined:hover {
+  border-color: unset;
+}

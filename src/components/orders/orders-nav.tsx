@@ -66,19 +66,7 @@ export function OrdersNav() {
           Đã giao hàng
         </Button>
       </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <Button
-          variant="outlined"
-          className="flex text-xs whitespace-nowrap items-center"
-        >
-          Đã giao
-        </Button>
-      </Typography>
+
       <Typography
         as="li"
         variant="small"

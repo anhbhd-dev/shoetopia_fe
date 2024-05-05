@@ -17,9 +17,14 @@ import {
 import Image from "next/image";
 import { useAppContext } from "@/contexts/app-context";
 import { useAuthContext } from "@/contexts/auth-context";
+import { useCartContext } from "@/contexts/cart-context";
 export function StickyNavbar() {
   const [openNav, setOpenNav] = React.useState(false);
   const { openLoginForm, openSignUpForm } = useAppContext();
+  const { user, isAuthenticating } = useAuthContext();
+
+  const { cart } = useCartContext();
+
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -27,7 +32,6 @@ export function StickyNavbar() {
     );
   }, []);
 
-  const { user, isAuthenticating } = useAuthContext();
   const navList = isAuthenticating ? (
     <SkeletonLoadingNavItem />
   ) : (
@@ -59,7 +63,7 @@ export function StickyNavbar() {
                     height={24}
                   />
                   <div className="rounded-full bg-red-500 absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center text-xs text-white">
-                    0
+                    {cart.items.length ?? 0}
                   </div>
                 </div>
               </Link>

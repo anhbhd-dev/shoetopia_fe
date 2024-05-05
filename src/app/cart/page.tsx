@@ -7,8 +7,8 @@ export default function page() {
   return (
     <div className="lg:mt-20">
       <h2 className="text-2xl font-bold lg:mb-8">Giỏ hàng</h2>
-      <div className="grid grid-cols-5 gap-8">
-        <div className="col-span-3">
+      <div className="grid grid-cols-6 gap-8">
+        <div className="col-span-4">
           <CartItemsList />
         </div>
         <div className="col-span-2">

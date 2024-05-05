@@ -8,6 +8,7 @@ import LoginForm from "@/components/auth/login-form";
 import SignUpForm from "@/components/auth/signup-form";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "react-hot-toast";
+import { CartProvider } from "@/contexts/cart-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,33 +27,35 @@ export default function RootLayout({
       <body className={inter.className}>
         <AppProvider>
           <AuthProvider>
-            <StickyNavbar />
-            <div style={{ minHeight: "70vh" }} className="lg:px-40">
-              <Toaster
-                position="top-center"
-                containerStyle={{ zIndex: 99999 }}
-                toastOptions={{
-                  success: {
-                    style: {
-                      background: "lightblue",
+            <CartProvider>
+              <StickyNavbar />
+              <div style={{ minHeight: "70vh" }} className="lg:px-40">
+                <Toaster
+                  position="top-center"
+                  containerStyle={{ zIndex: 99999 }}
+                  toastOptions={{
+                    success: {
+                      style: {
+                        background: "lightblue",
+                      },
+                      iconTheme: {
+                        primary: "white",
+                        secondary: "black",
+                      },
                     },
-                    iconTheme: {
-                      primary: "white",
-                      secondary: "black",
+                    error: {
+                      style: {
+                        background: "palevioletred",
+                      },
                     },
-                  },
-                  error: {
-                    style: {
-                      background: "palevioletred",
-                    },
-                  },
-                }}
-              />
-              {children}
-            </div>
-            <Footer />
-            <LoginForm />
-            <SignUpForm />
+                  }}
+                />
+                {children}
+              </div>
+              <Footer />
+              <LoginForm />
+              <SignUpForm />
+            </CartProvider>
           </AuthProvider>
         </AppProvider>
       </body>
