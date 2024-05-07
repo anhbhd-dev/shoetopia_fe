@@ -1,6 +1,6 @@
 import { Role } from "../enum/role";
 
-export interface Order {
+export type Order = {
   _id?: string;
   user?: User;
   shippingAddress?: string;
@@ -16,17 +16,17 @@ export interface Order {
   payment?: Payment;
   createdAt?: string;
   updatedAt?: string;
-}
+};
 
-export interface OrderItem {
+export type OrderItem = {
   variation?: Variation;
   price?: number;
   quantity?: number;
   _id?: string;
   product?: Product;
-}
+};
 
-export interface Product {
+export type Product = {
   _id: string;
   name: string;
   description: string;
@@ -36,9 +36,9 @@ export interface Product {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-}
+};
 
-export interface Variation {
+export type Variation = {
   _id: string;
   size: string;
   unitPrice: number;
@@ -46,17 +46,17 @@ export interface Variation {
   availableQuantity: number;
   createdAt: string;
   updatedAt: string;
-}
+};
 
-export interface Payment {
+export type Payment = {
   paymentMethod: string;
   paymentStatus: string;
   _id: string;
   createdAt: string;
   updatedAt: string;
-}
+};
 
-export interface User {
+export type User = {
   _id: string;
   firstName: string;
   lastName: string;
@@ -66,4 +66,4 @@ export interface User {
   updatedAt: string;
   phoneNumber: string;
   address: string;
-}
+};

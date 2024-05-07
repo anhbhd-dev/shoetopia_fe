@@ -33,15 +33,10 @@ export const fetchUserOrders = async (queryParams?: OrderParamsType) => {
 };
 
 export const fetchOrderById = async (id: string): Promise<Order> => {
-  try {
-    const response = await axiosInstance.get(
-      `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/orders/${id}`
-    );
-    return response.data;
-  } catch (error) {
-    // Xử lý lỗi
-    throw new Error(error as string);
-  }
+  const response = await axiosInstance.get(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/orders/${id}`
+  );
+  return response.data;
 };
 
 export const createOrder = async (checkoutInfo: CheckoutInfo) => {

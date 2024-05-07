@@ -1,25 +1,38 @@
 "use client";
+import { OrderItemSkeleton } from "@/components/orders/order-item";
 import OrderList from "@/components/orders/orders-list";
 import { OrdersNav } from "@/components/orders/orders-nav";
-import { fetchUserCart } from "@/services/cart.service";
+import { OrderStatus } from "@/enum/order";
 import { fetchUserOrders } from "@/services/order.service";
 import React, { useEffect } from "react";
 
 export default function OrdersListing() {
-  const [orders, setOrders] = React.useState([]);
+  const [orders, setOrders] = React.useState();
+  const [filter, setFilter] = React.useState<{ orderStatus?: OrderStatus }>({
+    orderStatus: OrderStatus.PENDING,
+  });
+  const [isLoadingOrders, setIsLoadingOrders] = React.useState(true);
   useEffect(() => {
     const fetchOrders = async () => {
-      const response = await fetchUserOrders();
-      setOrders(response);
+      const response = await fetchUserOrders(filter);
+      setOrders(response.orders);
+      setIsLoadingOrders(false);
     };
     fetchOrders();
-  }, []);
+  }, [filter]);
 
-  console.log(orders);
   return (
     <div>
-      <OrdersNav />
-      <OrderList />
+      <OrdersNav
+        setIsLoadingOrders={setIsLoadingOrders}
+        setFilter={setFilter}
+        filter={filter}
+      />
+      {isLoadingOrders ? (
+        Array.from({ length: 3 }).map((_, i) => <OrderItemSkeleton key={i} />)
+      ) : (
+        <OrderList orders={orders} />
+      )}
     </div>
   );
 }

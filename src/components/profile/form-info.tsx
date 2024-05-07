@@ -61,6 +61,7 @@ export function FormInfo() {
         });
       } finally {
         formik.setSubmitting(false);
+        setIsEditingShippingInfo(false);
       }
     },
   });

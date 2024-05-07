@@ -18,7 +18,7 @@ export default function ProductsResultListing({
   productsList,
 }: ProductsResultListingProps) {
   return (
-    <>
+    <div className=" min-h-[700px]">
       <div className="grid grid-cols-3 gap-4 gap-y-10">
         {productsList?.length > 0 &&
           productsList.map((product) => (
@@ -26,7 +26,7 @@ export default function ProductsResultListing({
           ))}
       </div>
       {productsList.length === 0 && <NoProducts />}
-    </>
+    </div>
   );
 }
 

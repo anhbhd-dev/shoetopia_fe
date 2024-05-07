@@ -21,10 +21,10 @@ export default function ProfileLayout({
 
   return (
     <div className="lg:grid grid-cols-7 lg:mt-10">
-      <div className="col-span-2">
+      <div className="col-span-2 min-h-screen">
         <ProfileSideBar />
       </div>
-      <div className="col-span-5">{children}</div>
+      <div className="col-span-5 ml-10">{children}</div>
     </div>
   );
 }
