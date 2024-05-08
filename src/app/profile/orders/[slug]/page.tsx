@@ -1,16 +1,18 @@
 "use client";
 import { OrderStatus, PaymentMethod, PaymentStatus } from "@/enum/order";
-import { fetchOrderById } from "@/services/order.service";
+import { fetchOrderById, updateOrder } from "@/services/order.service";
 import { Order } from "@/types/order.type";
 import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
 import toast from "react-hot-toast";
 import { Image } from "antd";
 import { formatMoney } from "@/utils/format-money";
+import { Button } from "@material-tailwind/react";
 export default function OrderDetails() {
   const [isFetchingOrder, setIsFetchingOrder] = React.useState(false);
   const [order, setOrder] = React.useState<Order>();
   const { slug } = useParams();
+  const [isShowModal, setIsShowModal] = React.useState(false);
   useEffect(() => {
     setIsFetchingOrder(true);
     const fetchOrder = async () => {
@@ -33,10 +35,64 @@ export default function OrderDetails() {
     fetchOrder();
   }, [slug]);
   const orderStatus = order?.orderStatus?.slice(-1)[0];
+
+  const handleChangeOrderStatus = async (currentStatus: OrderStatus) => {
+    if (
+      currentStatus === OrderStatus.PROCESSING ||
+      currentStatus === OrderStatus.PENDING
+    ) {
+      const dataOrderUpdated = await updateOrder({
+        orderId: order?._id as string,
+        orderStatus: OrderStatus.CANCELLED,
+      });
+      setOrder(dataOrderUpdated);
+    }
+    if (currentStatus === OrderStatus.SHIPPING) {
+      const dataOrderUpdated = await updateOrder({
+        orderId: order?._id as string,
+        orderStatus: OrderStatus.DELIVERED,
+      });
+      setOrder(dataOrderUpdated);
+    }
+  };
+
   return (
     <main>
       <div>
-        <h1 className="text-2xl font-semibold mb-10">{order?.orderCode}</h1>
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-semibold mb-10">{order?.orderCode}</h1>
+          {(orderStatus === OrderStatus.PENDING ||
+            orderStatus === OrderStatus.PROCESSING) && (
+            <ModalConfirm
+              text="Huỷ đơn hàng"
+              variant="outlined"
+              className="h-10"
+              color="red"
+              isOpen={isShowModal}
+              setIsOpen={setIsShowModal}
+              onClickConfirm={() => handleChangeOrderStatus(orderStatus)}
+              textHeader={"Xác nhận huỷ đơn hàng"}
+              textContent={
+                "Việc huỷ đơn hàng là không thể hoàn tác bán có muốn huỷ?"
+              }
+            />
+          )}
+          {orderStatus === OrderStatus.SHIPPING && (
+            <ModalConfirm
+              text="Đã nhận hàng"
+              variant="outlined"
+              className="h-10"
+              color="blue-gray"
+              isOpen={isShowModal}
+              setIsOpen={setIsShowModal}
+              onClickConfirm={() => handleChangeOrderStatus(orderStatus)}
+              textHeader={"Xác nhận đã nhận đơn hàng"}
+              textContent={
+                "Việc xác nhận đã nhận đơn hàng là không thể hoàn tác bán có xác nhận?"
+              }
+            />
+          )}
+        </div>
         <div className="flex gap-5 mb-5">
           <p className="min-w-[200px]">Trạng thái đơn hàng</p>
           <p>
@@ -183,13 +239,66 @@ export default function OrderDetails() {
   );
 }
 
-{
-  /* <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Default</span>
-<span className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Dark</span>
-<span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Red</span>
-<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Green</span>
-<span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Yellow</span>
-<span class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">Indigo</span>
-<span class="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Purple</span>
-<span class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">Pink</span> */
+import {
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
+
+export type ModalConfirmProps = {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+  onClickConfirm: () => {};
+  className: string;
+  text: string;
+  variant: any;
+  textHeader: string;
+  textContent: string;
+  color: any;
+};
+export function ModalConfirm({
+  isOpen,
+  setIsOpen,
+  onClickConfirm,
+  variant,
+  color,
+  text,
+  textContent,
+  textHeader,
+  ...rest
+}: ModalConfirmProps) {
+  return (
+    <>
+      <Button
+        onClick={() => setIsOpen(true)}
+        variant={variant ?? "outlined"}
+        {...rest}
+      >
+        {text}
+      </Button>
+      <Dialog
+        open={isOpen}
+        size={"xs"}
+        handler={() => setIsOpen(!isOpen)}
+        color={color}
+      >
+        <DialogHeader className="text-xl">{textHeader}</DialogHeader>
+        <DialogBody>{textContent}</DialogBody>
+        <DialogFooter>
+          <Button
+            variant="outlined"
+            color="red"
+            onClick={() => setIsOpen(false)}
+            className="mr-1"
+          >
+            <span>Huỷ</span>
+          </Button>
+          <Button variant="gradient" color="black" onClick={onClickConfirm}>
+            <span>Xác nhận</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+    </>
+  );
 }

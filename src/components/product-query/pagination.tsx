@@ -17,38 +17,36 @@ export function PLPPagination({
 }: PLPPaginationProps) {
   const getItemProps = (pageNumber: number) =>
     ({
-      variant:
-        filterProductsPage?.currentPage === pageNumber ? "filled" : "text",
+      variant: filterProductsPage?.page === pageNumber ? "filled" : "text",
       color: "gray",
       onClick: () =>
-        setFilterProductsPage((prev) => ({ ...prev, currentPage: pageNumber })),
+        setFilterProductsPage((prev) => ({ ...prev, page: pageNumber })),
     } as any);
 
   const next = () => {
-    if (filterProductsPage?.currentPage === filterProductsPage?.totalPage)
-      return;
+    if (filterProductsPage?.page === filterProductsPage?.totalPage) return;
 
     setFilterProductsPage((prev) => ({
       ...prev,
-      currentPage: (prev.currentPage ?? 0) + 1,
+      page: (prev.page ?? 0) + 1,
     }));
   };
   const prev = () => {
-    if (filterProductsPage?.currentPage === 1) return;
+    if (filterProductsPage?.page === 1) return;
 
     setFilterProductsPage((prev) => ({
       ...prev,
-      currentPage: (prev.currentPage ?? 0) - 1,
+      page: (prev.page ?? 0) - 1,
     }));
   };
-
+  console.log(filterProductsPage);
   return (
     <div className="flex items-center gap-4 justify-end lg:mt-10">
       <Button
         variant="text"
         className="flex items-center gap-2"
         onClick={prev}
-        disabled={filterProductsPage?.currentPage === 1}
+        disabled={filterProductsPage?.page === 1}
       >
         <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
       </Button>
@@ -65,9 +63,7 @@ export function PLPPagination({
         variant="text"
         className="flex items-center gap-2"
         onClick={next}
-        disabled={
-          filterProductsPage?.currentPage === filterProductsPage?.totalPage
-        }
+        disabled={filterProductsPage?.page === filterProductsPage?.totalPage}
       >
         Next
         <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />

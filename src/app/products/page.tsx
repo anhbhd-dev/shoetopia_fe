@@ -20,7 +20,7 @@ export type FilterAndSortProductsType = {
   size?: string;
   sortBy?: SortBy;
   orderBy?: OrderBy;
-  currentPage?: number;
+  page?: number;
   totalPage?: number;
   totalDocs?: number;
 };
@@ -30,7 +30,7 @@ export default function ProductsListing() {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [filterProductsPage, setFilterProductsPage] =
     useState<FilterAndSortProductsType>({
-      currentPage: 1,
+      page: 1,
     });
   const [categoriesData, setCategoriesData] = useState<{
     categories: Category[];
@@ -88,7 +88,7 @@ export default function ProductsListing() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    filterProductsPage.currentPage,
+    filterProductsPage.page,
     filterProductsPage.name,
     filterProductsPage.categories,
     filterProductsPage.minPrice,

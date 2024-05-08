@@ -46,6 +46,7 @@ export default function FilterPLP({
     // Thực hiện tác vụ tìm kiếm khi debouncedSearchKeyword thay đổi
     setFilterProductsPage((prev) => ({
       ...prev,
+      page: 1,
       name: debouncedSearchKeyword,
     }));
   }, [debouncedSearchKeyword, setFilterProductsPage]);
@@ -85,6 +86,7 @@ export default function FilterPLP({
     setFilterProductsPage((prev) => ({
       ...prev,
       categories: debouncedSelectedCategoryIds.join(","),
+      page: 1,
     }));
   }, [debouncedSelectedCategoryIds, setFilterProductsPage]);
 

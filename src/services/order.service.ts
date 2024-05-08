@@ -56,7 +56,7 @@ export type UpdateOrderDto = {
 
 export const updateOrder = async (data: UpdateOrderDto) => {
   const response = await axiosInstance.put(
-    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/admin/orders/${data.orderId}`,
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/orders/${data.orderId}`,
     data
   );
 
