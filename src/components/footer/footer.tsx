@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 export default function Footer() {
@@ -5,9 +6,14 @@ export default function Footer() {
     <footer className="relative w-full mt-20">
       <div className="w-full px-8 mx-auto max-w-7xl">
         <div className="grid justify-between grid-cols-1 gap-4 md:grid-cols-2">
-          <h5 className="block mb-6 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-inherit">
-            Material Tailwind
-          </h5>
+          <div>
+            <Image
+              src={"images/logo.svg"}
+              alt="logo"
+              width={200}
+              height={200}
+            />
+          </div>
           <div className="grid justify-between grid-cols-3 gap-4">
             <ul>
               <p className="block mb-3 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900 opacity-40">

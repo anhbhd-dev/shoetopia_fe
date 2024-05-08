@@ -1,17 +1,23 @@
 "use client";
 import { useCartContext } from "@/contexts/cart-context";
+import { PaymentMethod } from "@/enum/order";
 import { CHECKOUT_BASE_URL } from "@/routes/routes";
-import { createOrder } from "@/services/order.service";
+import {
+  createOrder,
+  createPaymentOnlineVNPayUrl,
+} from "@/services/order.service";
+import { Order } from "@/types/order.type";
 import { formatMoney } from "@/utils/format-money";
 import Button from "@material-tailwind/react/components/Button";
 import { usePathname, useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function SubTotal() {
   const router = useRouter();
   const { cart, checkOutInformation, fetchCart } = useCartContext();
   const pathname = usePathname();
+  const [orderResponse, setOrderResponse] = useState<Order>();
   const isOnCheckoutPage = useMemo(
     () => pathname.startsWith(CHECKOUT_BASE_URL),
     [pathname]
@@ -20,8 +26,30 @@ export default function SubTotal() {
   const handlePlaceOrder = async () => {
     if (checkOutInformation) {
       try {
-        const orderResponse = await createOrder(checkOutInformation);
-        if (orderResponse) {
+        const orderResponse: Order = await createOrder(checkOutInformation);
+        setOrderResponse(orderResponse);
+
+        if (
+          orderResponse &&
+          checkOutInformation.payment?.paymentMethod === PaymentMethod.VNPAY
+        ) {
+          const orderDesc = "Thanh toan cho order: " + orderResponse.orderCode;
+          const urlOnlinePaymentVNPay = await createPaymentOnlineVNPayUrl({
+            totalAmount: orderResponse.totalAmount ?? 0,
+            orderDescription: orderDesc,
+          });
+
+          if (urlOnlinePaymentVNPay) {
+            router.push(urlOnlinePaymentVNPay.vnpUrl);
+            fetchCart();
+          }
+        }
+
+        if (
+          orderResponse &&
+          checkOutInformation.payment?.paymentMethod ===
+            PaymentMethod.CASH_ON_DELIVERY
+        ) {
           fetchCart();
           toast.success("Đặt hàng thành công.", {
             duration: 2000,

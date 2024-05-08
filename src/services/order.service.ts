@@ -47,6 +47,20 @@ export const createOrder = async (checkoutInfo: CheckoutInfo) => {
   return response.data;
 };
 
+export type PaymentUrl = {
+  totalAmount: number;
+  orderDescription: string;
+};
+export const createPaymentOnlineVNPayUrl = async (
+  createPaymentUrlDto: PaymentUrl
+) => {
+  const response = await axiosInstance.post(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/payment/create_payment_url`,
+    createPaymentUrlDto
+  );
+  return response.data;
+};
+
 export type UpdateOrderDto = {
   orderId: string;
   orderStatus?: OrderStatus;

@@ -95,7 +95,14 @@ export function StickyNavbar() {
             href={BASE_URL}
             className="mr-4 cursor-pointer py-1.5 font-medium"
           >
-            Material Tailwind
+            <div>
+              <Image
+                src={"images/logo.svg"}
+                alt="logo"
+                width={120}
+                height={120}
+              />
+            </div>
           </Link>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
