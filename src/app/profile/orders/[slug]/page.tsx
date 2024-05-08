@@ -45,14 +45,41 @@ export default function OrderDetails() {
         orderId: order?._id as string,
         orderStatus: OrderStatus.CANCELLED,
       });
-      setOrder(dataOrderUpdated);
+
+      if (!(dataOrderUpdated instanceof Error)) {
+        const response = await fetchOrderById(slug as string);
+        setOrder(response);
+        toast.success("Huỷ đơn hàng thành công", {
+          duration: 2000,
+          style: {
+            background: "#fff",
+          },
+          iconTheme: {
+            primary: "green",
+            secondary: "#fff",
+          },
+        });
+      }
     }
     if (currentStatus === OrderStatus.SHIPPING) {
       const dataOrderUpdated = await updateOrder({
         orderId: order?._id as string,
         orderStatus: OrderStatus.DELIVERED,
       });
-      setOrder(dataOrderUpdated);
+      if (!(dataOrderUpdated instanceof Error)) {
+        const response = await fetchOrderById(slug as string);
+        setOrder(response);
+        toast.success("Xác nhận đơn hàng thành công", {
+          duration: 2000,
+          style: {
+            background: "#fff",
+          },
+          iconTheme: {
+            primary: "green",
+            secondary: "#fff",
+          },
+        });
+      }
     }
   };
 
