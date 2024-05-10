@@ -97,7 +97,7 @@ export function StickyNavbar() {
           >
             <div>
               <Image
-                src={"images/logo.svg"}
+                src={"/images/logo.svg"}
                 alt="logo"
                 width={120}
                 height={120}

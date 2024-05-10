@@ -5,11 +5,18 @@ import { Order } from "@/types/order.type";
 import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
 import toast from "react-hot-toast";
-import { Image } from "antd";
 import { formatMoney } from "@/utils/format-money";
 import { Button } from "@material-tailwind/react";
+import {
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
+import OrderItemInfo from "@/components/order-details/order-item";
 export default function OrderDetails() {
-  const [isFetchingOrder, setIsFetchingOrder] = React.useState(false);
+  const [isFetchingOrder, setIsFetchingOrder] = React.useState(true);
+  const [toggleFetchOrder, setToggleFetchOrder] = React.useState(false);
   const [order, setOrder] = React.useState<Order>();
   const { slug } = useParams();
   const [isShowModal, setIsShowModal] = React.useState(false);
@@ -33,7 +40,7 @@ export default function OrderDetails() {
       }
     };
     fetchOrder();
-  }, [slug]);
+  }, [slug, toggleFetchOrder]);
   const orderStatus = order?.orderStatus?.slice(-1)[0];
 
   const handleChangeOrderStatus = async (currentStatus: OrderStatus) => {
@@ -83,6 +90,7 @@ export default function OrderDetails() {
     }
   };
 
+  if (isFetchingOrder) return null;
   return (
     <main>
       <div>
@@ -191,30 +199,12 @@ export default function OrderDetails() {
             <tbody>
               {order?.orderItems?.map((item) => {
                 return (
-                  <tr
+                  <OrderItemInfo
+                    setIsFetchingOrder={setToggleFetchOrder}
+                    orderStatus={orderStatus as OrderStatus}
+                    item={item}
                     key={item._id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-black"
-                  >
-                    <th
-                      scope="row"
-                      className="py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {item?.product?.name}
-                    </th>
-                    <td className="py-4 w-32">
-                      <Image
-                        className="rounded-lg"
-                        src={item?.product?.avatar}
-                        width={"80px"}
-                        alt="Dan Abram"
-                      />
-                    </td>
-                    <td className="py-4 w-32">{item?.variation?.size}</td>
-                    <td className="py-4 w-32">{item?.quantity}</td>
-                    <td className="py-4 w-32">
-                      {formatMoney(item.price ?? 0)}
-                    </td>
-                  </tr>
+                  />
                 );
               })}
             </tbody>
@@ -265,13 +255,6 @@ export default function OrderDetails() {
     </main>
   );
 }
-
-import {
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
 
 export type ModalConfirmProps = {
   isOpen: boolean;

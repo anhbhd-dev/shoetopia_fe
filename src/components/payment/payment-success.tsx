@@ -1,7 +1,14 @@
 "use client";
+import { OrderStatus, PaymentStatus } from "@/enum/order";
+import { ORDERS_LIST_BASE_URL } from "@/routes/routes";
+import { updateOrderByCode } from "@/services/order.service";
+import { Order } from "@/types/order.type";
 import { formatMoney } from "@/utils/format-money";
+import { Button } from "@material-tailwind/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export enum PaymentVNPayStatusCode {
   SUCCESS = "00",
@@ -17,6 +24,32 @@ const SuccessPage = () => {
   const vnp_PayDate = searchParams.get("vnp_PayDate");
   const vnp_TransactionNo = searchParams.get("vnp_TransactionNo");
   const vnp_TransactionStatus = searchParams.get("vnp_TransactionStatus");
+
+  const [orderUpdateResult, setOrderUpdateResult] = useState<Order | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    const updateOrderByOrderCode = async () => {
+      if (vnp_OrderInfo) {
+        const orderCode = vnp_OrderInfo.split(" ")[4];
+        let updatedOrder: Order | undefined;
+        if (vnp_TransactionStatus === PaymentVNPayStatusCode.SUCCESS) {
+          updatedOrder = await updateOrderByCode({
+            orderCode,
+            paymentStatus: PaymentStatus.PAID,
+          });
+        } else {
+          updatedOrder = await updateOrderByCode({
+            orderCode,
+            orderStatus: OrderStatus.CANCELLED,
+          });
+        }
+        setOrderUpdateResult(updatedOrder);
+      }
+    };
+    updateOrderByOrderCode();
+  }, [vnp_OrderInfo, vnp_TransactionStatus]);
 
   let textResult;
   let textColor;
@@ -44,12 +77,21 @@ const SuccessPage = () => {
         {textResult}
       </h1>
       <div className="flex justify-center mb-10">
-        <Image
-          src={"/images/done_payment.svg"}
-          alt="success"
-          width={50}
-          height={50}
-        />
+        {vnp_TransactionStatus === PaymentVNPayStatusCode.SUCCESS ? (
+          <Image
+            src={"/images/done_payment.svg"}
+            alt="success"
+            width={50}
+            height={50}
+          />
+        ) : (
+          <Image
+            src={"/images/error-payment.svg"}
+            alt="success"
+            width={50}
+            height={50}
+          />
+        )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -58,7 +100,9 @@ const SuccessPage = () => {
         </div>
         <div>
           <p className="text-lg font-medium">Mã giao dịch ngân hàng:</p>
-          <p className="text-gray-600">{vnp_BankTranNo}</p>
+          <p className="text-gray-600">
+            {vnp_BankTranNo ?? "Chưa hoàn tất thanh toán"}
+          </p>
         </div>
         <div>
           <p className="text-lg font-medium">Thông tin đơn hàng:</p>
@@ -72,6 +116,14 @@ const SuccessPage = () => {
           <p className="text-lg font-medium">Mã giao dịch:</p>
           <p className="text-gray-600">{vnp_TransactionNo}</p>
         </div>
+      </div>
+      <div className="mt-8">
+        <Link
+          href={ORDERS_LIST_BASE_URL + "/" + orderUpdateResult?._id ?? ""}
+          className="text-blue-600"
+        >
+          Xem chi tiết đơn hàng
+        </Link>
       </div>
     </div>
   );

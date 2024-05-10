@@ -189,6 +189,42 @@ export default function ProductDetailsInfo({
           Mua ngay
         </Button>
       </div>
+      <OpenSizeChart />
     </div>
+  );
+}
+
+import {
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
+import Image from "next/image";
+
+export function OpenSizeChart() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => setOpen(!open);
+
+  return (
+    <>
+      <div onClick={handleOpen}>
+        <p className="underline mt-10 cursor-pointer font-semibold">
+          Xem bảng size
+        </p>
+      </div>
+
+      <Dialog size="md" open={open} handler={handleOpen}>
+        <DialogBody>
+          <Image
+            src="/images/size-chart.png"
+            width={600}
+            height={600}
+            alt="size chart"
+          />
+        </DialogBody>
+      </Dialog>
+    </>
   );
 }

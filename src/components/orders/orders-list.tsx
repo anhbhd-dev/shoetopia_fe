@@ -22,7 +22,7 @@ export default function OrderList({ orders }: OrderListProps) {
     );
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 lg:min-h-[500px]">
       {!orders
         ? Array.from({ length: 4 }).map((_, i) => <OrderItemSkeleton key={i} />)
         : orders?.map((order) => <OrderItem key={order._id} order={order} />)}

@@ -39,7 +39,7 @@ export function PLPPagination({
       page: (prev.page ?? 0) - 1,
     }));
   };
-  console.log(filterProductsPage);
+
   return (
     <div className="flex items-center gap-4 justify-end lg:mt-10">
       <Button

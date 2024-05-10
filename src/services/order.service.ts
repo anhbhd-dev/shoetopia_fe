@@ -1,5 +1,5 @@
 import { CheckoutInfo } from "@/contexts/cart-context";
-import { OrderStatus } from "../enum/order";
+import { OrderStatus, PaymentStatus } from "../enum/order";
 import { OrderBy, SortBy } from "../enum/sort.enum";
 import { Order } from "../types/order.type";
 import { ProductFormType } from "../types/product.type";
@@ -62,10 +62,24 @@ export const createPaymentOnlineVNPayUrl = async (
 };
 
 export type UpdateOrderDto = {
-  orderId: string;
+  orderId?: string;
   orderStatus?: OrderStatus;
   shippingAddress?: string;
   phoneNumber?: string;
+  orderCode?: string;
+  paymentStatus?: PaymentStatus;
+};
+
+export const updateOrderByCode = async (data: UpdateOrderDto) => {
+  const response = await axiosInstance.put(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/orders/order-code/${data.orderCode}`,
+    data
+  );
+
+  if (response.status === 200) {
+    return response.data;
+  }
+  throw new Error("Failed to update category");
 };
 
 export const updateOrder = async (data: UpdateOrderDto) => {

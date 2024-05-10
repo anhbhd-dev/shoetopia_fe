@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid justify-between grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <Image
-              src={"images/logo.svg"}
+              src={"/images/logo.svg"}
               alt="logo"
               width={200}
               height={200}

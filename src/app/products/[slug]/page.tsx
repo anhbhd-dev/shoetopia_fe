@@ -14,17 +14,22 @@ export default function ProductDetails({
 }) {
   const [productDetails, setProductDetails] = React.useState<Product>();
   const router = useRouter();
+  const [isFetchingProductDetails, setIsFetchingProductDetails] =
+    React.useState(true);
   useEffect(() => {
     async function fetchProductDetails() {
       try {
         const productData = await fetchProductById(params.slug);
         setProductDetails(productData);
+        setIsFetchingProductDetails(false);
       } catch (err) {
         router.push("/not-found");
       }
     }
     fetchProductDetails();
   }, [params.slug, router]);
+
+  if (isFetchingProductDetails) return null;
   return (
     <>
       <div className="grid grid-cols-4 lg:mt-20 gap-20">
