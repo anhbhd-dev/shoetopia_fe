@@ -1,8 +1,8 @@
 import axiosInstance from "./axios-initial";
 
-export const checkIsAlreadyRated = async (variationId: string) => {
+export const checkIsAlreadyRated = async (productId: string) => {
   const response = await axiosInstance.get(
-    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/reviews/check-existed-review/${variationId}`
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/reviews/check-existed-review/${productId}`
   );
   return response.data;
 };
@@ -10,7 +10,7 @@ export const checkIsAlreadyRated = async (variationId: string) => {
 export type CreateReviewDto = {
   content: string;
 
-  variationId: string;
+  productId: string;
   rating: number;
 };
 export const addReview = async (createReviewDto: CreateReviewDto) => {

@@ -13,6 +13,7 @@ import {
   BASE_URL,
   CART_BASE_URL,
   PROFILE_BASE_URL,
+  ORDERS_LIST_BASE_URL,
 } from "@/routes/routes";
 import Image from "next/image";
 import { useAppContext } from "@/contexts/app-context";
@@ -43,14 +44,28 @@ export function StickyNavbar() {
         className="p-1 font-normal"
       >
         <div className="flex gap-5">
-          <Link
-            href={PRODUCTS_LIST_BASE_URL}
-            className="flex items-center text-sm font-semibold uppercase"
-          >
-            Sản phẩm
-          </Link>
+          <div className="flex gap-10 ">
+            <Link
+              href={BASE_URL}
+              className="flex items-center text-sm font-semibold uppercase"
+            >
+              Trang chủ
+            </Link>
+            <Link
+              href={PRODUCTS_LIST_BASE_URL}
+              className="flex items-center text-sm font-semibold uppercase"
+            >
+              Sản phẩm
+            </Link>
+          </div>
           {user.isAuthenticated && !isAuthenticating && (
             <>
+              <Link
+                href={ORDERS_LIST_BASE_URL}
+                className="flex items-center text-sm font-semibold uppercase lg:ml-5"
+              >
+                Lịch sử đơn hàng
+              </Link>
               <Link
                 href={CART_BASE_URL}
                 className="flex items-center text-sm font-semibold uppercase"

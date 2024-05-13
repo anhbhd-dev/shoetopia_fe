@@ -34,7 +34,7 @@ export default function OrderItemInfo({
   const [isCreatingReview, setIsCreatingReview] = React.useState(false);
   useEffect(() => {
     const checkIsRated = async () => {
-      const res = await checkIsAlreadyRated(item.variation?._id ?? "");
+      const res = await checkIsAlreadyRated(item.product?._id ?? "");
       setIsExisted(res.isExisted);
     };
     checkIsRated();
@@ -44,7 +44,7 @@ export default function OrderItemInfo({
       setIsCreatingReview(true);
       const createReviewResponse = await addReview({
         ...(data as any),
-        variation: item.variation?._id ?? "",
+        productId: item.product?._id ?? "",
       });
       setIsCreatingReview(false);
       setIsFetchingOrder((prev) => !prev);

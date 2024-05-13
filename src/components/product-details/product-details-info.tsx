@@ -5,14 +5,7 @@ import { useCartContext } from "@/contexts/cart-context";
 import { Product } from "@/types/product.type";
 import { Variation } from "@/types/variation.type";
 import { formatMoney } from "@/utils/format-money";
-import {
-  Button,
-  IconButton,
-  Input,
-  Rating,
-  Typography,
-} from "@material-tailwind/react";
-import { InputNumber } from "antd";
+import { Button, IconButton, Typography } from "@material-tailwind/react";
 import React from "react";
 import toast from "react-hot-toast";
 
@@ -194,12 +187,7 @@ export default function ProductDetailsInfo({
   );
 }
 
-import {
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import { Dialog, DialogBody } from "@material-tailwind/react";
 import Image from "next/image";
 
 export function OpenSizeChart() {
@@ -210,7 +198,7 @@ export function OpenSizeChart() {
   return (
     <>
       <div onClick={handleOpen}>
-        <p className="underline mt-10 cursor-pointer font-semibold">
+        <p className="mt-10 cursor-pointer font-semibold text-blue-gray-900">
           Xem bảng size
         </p>
       </div>

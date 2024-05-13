@@ -1,6 +1,7 @@
 "use client";
 import { PRODUCTS_LIST_BASE_URL } from "@/routes/routes";
 import { Product } from "@/types/product.type";
+import { Variation } from "@/types/variation.type";
 import { formatMoney } from "@/utils/format-money";
 import {
   Card,
@@ -15,6 +16,22 @@ export type ProductCardType = {
 };
 
 export function ProductCard({ product }: ProductCardType) {
+  const findMinMaxPrice = (variations: Variation[]) => {
+    const minPrice = variations.reduce(
+      (min, variation) =>
+        variation.salePrice < min ? variation.salePrice : min,
+      variations[0]?.salePrice
+    );
+
+    const maxPrice = variations.reduce(
+      (max, variation) =>
+        variation.salePrice > max ? variation.salePrice : max,
+      variations[0]?.salePrice
+    );
+
+    return { minPrice, maxPrice };
+  };
+  const { minPrice, maxPrice } = findMinMaxPrice(product?.variations ?? []);
   return (
     <Card className="w-full lg:w-full overflow-hidden rounded-lg border shadow-md">
       <div
@@ -59,15 +76,25 @@ export function ProductCard({ product }: ProductCardType) {
           </Typography>
         </div>
         <div className="flex justify-between gap-5 ">
-          <Typography color="black" className="mb-1 block font-bold text-base">
-            {formatMoney(2000000)}
+          <Typography color="gray" className="mb-1 block font-bold text-base">
+            {formatMoney(minPrice)}
           </Typography>
-          <Typography
-            color="gray"
-            className="mb-1 block font-bold line-through text-base"
-          >
-            {formatMoney(2000000)}
-          </Typography>
+          {minPrice !== maxPrice && (
+            <>
+              <Typography
+                color="black"
+                className="mb-1 block font-bold text-base"
+              >
+                -
+              </Typography>
+              <Typography
+                color="gray"
+                className="mb-1 block font-bold text-base"
+              >
+                {formatMoney(maxPrice)}
+              </Typography>
+            </>
+          )}
         </div>
       </CardBody>
     </Card>
