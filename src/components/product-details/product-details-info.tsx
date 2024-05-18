@@ -6,13 +6,13 @@ import { Product } from "@/types/product.type";
 import { Variation } from "@/types/variation.type";
 import { formatMoney } from "@/utils/format-money";
 import { Button, IconButton, Typography } from "@material-tailwind/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export type ProductDetailsInfoProps = {
   productDetails: Product | undefined;
 };
-
+const REVIEWS_PER_PAGE = 5;
 export default function ProductDetailsInfo({
   productDetails,
 }: ProductDetailsInfoProps) {
@@ -24,6 +24,7 @@ export default function ProductDetailsInfo({
   const { user } = useAuthContext();
   const { addToCart, cart } = useCartContext();
   const { openLoginForm } = useAppContext();
+
   const findMinMaxPrice = (variations: Variation[]) => {
     const minPrice = variations.reduce(
       (min, variation) =>
@@ -189,6 +190,7 @@ export default function ProductDetailsInfo({
 
 import { Dialog, DialogBody } from "@material-tailwind/react";
 import Image from "next/image";
+import { fetchReviewsByProductId } from "@/services/review.service";
 
 export function OpenSizeChart() {
   const [open, setOpen] = React.useState(false);

@@ -1,11 +1,14 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
 import { Product } from "@/types/product.type";
+import { ProductDetailRate } from "../order-details/product-rating/product-rate";
+import { fetchReviewsByProductId } from "@/services/review.service";
+import { Review } from "@/types/review.type";
 
 function Icon({ id, open }) {
   return (
@@ -36,6 +39,17 @@ export function DescriptionAndReview({
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value) => setOpen(open === value ? 0 : value);
+  const [reviews, setReviews] = useState<Review[]>([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const dataReviews = await fetchReviewsByProductId(
+        productDetails?._id ?? ""
+      );
+      setReviews(dataReviews);
+    };
+    fetchReviews();
+  }, [productDetails]);
 
   return (
     <div className="lg:mt-14">
@@ -50,10 +64,9 @@ export function DescriptionAndReview({
           Đánh giá của người mua
         </AccordionHeader>
         <AccordionBody>
-          We&apos;re not always in the position that we want to be at.
-          We&apos;re constantly growing. We&apos;re constantly making mistakes.
-          We&apos;re constantly trying to express ourselves and actualize our
-          dreams.
+          {reviews.map((review) => (
+            <ProductDetailRate key={review._id} review={review} />
+          ))}
         </AccordionBody>
       </Accordion>
     </div>
