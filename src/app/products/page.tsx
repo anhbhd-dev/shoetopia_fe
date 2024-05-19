@@ -74,6 +74,9 @@ export default function ProductsListing() {
 
   useEffect(() => {
     setIsLoadingProducts(true);
+
+    let timer: any;
+
     const fetchAllProducts = async () => {
       const data = await fetchProducts(filterProductsPage);
       setProducts(data.products);
@@ -82,9 +85,15 @@ export default function ProductsListing() {
         totalPage: data.totalPage,
         totalDocs: data.totalDocs,
       });
-      setIsLoadingProducts(false);
+
+      timer = setTimeout(() => {
+        setIsLoadingProducts(false);
+      }, 200);
     };
+
     fetchAllProducts();
+
+    return () => clearTimeout(timer);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

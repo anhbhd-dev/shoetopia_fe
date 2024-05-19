@@ -18,7 +18,7 @@ export default function ProfileLayout({
     router.push("/");
     openLoginForm();
   }
-
+  if (!user.isAuthenticated) return null;
   return (
     <div className="lg:grid grid-cols-7 lg:mt-10">
       <div className="col-span-2 min-h-screen">

@@ -23,7 +23,7 @@ function StarIcon() {
   );
 }
 
-export function TestimonialCard() {
+export function TestimonialCard({ comment }: { comment: any }) {
   return (
     <Card
       color="transparent"
@@ -44,8 +44,12 @@ export function TestimonialCard() {
         />
         <div className="flex w-full flex-col gap-0.5">
           <div className="flex items-center justify-between">
-            <Typography variant="h5" color="blue-gray">
-              Tania Andrew
+            <Typography
+              variant="h5"
+              className="text-wrap w-40"
+              color="blue-gray"
+            >
+              {comment.name}
             </Typography>
             <div className="5 flex items-center gap-0">
               <StarIcon />
@@ -55,15 +59,10 @@ export function TestimonialCard() {
               <StarIcon />
             </div>
           </div>
-          <Typography color="blue-gray">Frontend Lead @ Google</Typography>
         </div>
       </CardHeader>
-      <CardBody className="mb-6 p-0">
-        <Typography>
-          &quot;I found solution to all my design needs from Creative Tim. I use
-          them as a freelancer in my hobby projects for fun! And its really
-          affordable, very humble guys !!!&quot;
-        </Typography>
+      <CardBody className="mb-6 min-h-[100px] p-0">
+        <Typography>{comment.comment}</Typography>
       </CardBody>
     </Card>
   );

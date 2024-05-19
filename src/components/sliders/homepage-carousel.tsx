@@ -8,6 +8,7 @@ export function HomepageCarousel() {
         className="lg:mt-10 mt-5 rounded-xl"
         autoplay={true}
         autoplayDelay={5000}
+        loop={true}
       >
         {Array.from({ length: 4 }).map((_, i) => (
           <Image

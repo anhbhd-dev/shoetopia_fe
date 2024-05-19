@@ -40,3 +40,10 @@ export const fetchReviewsByProductId = async (
   );
   return response.data;
 };
+
+export const getAverageRatingByProductId = async (productId: string) => {
+  const response = await axiosInstance.get(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/reviews/average-rating/${productId}`
+  );
+  return response.data;
+};

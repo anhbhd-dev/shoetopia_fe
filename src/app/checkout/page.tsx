@@ -16,6 +16,7 @@ export default function Checkout() {
     router.push("/");
     openLoginForm();
   }
+  if (!user.isAuthenticated) return null;
   return (
     <main>
       <div className="lg:mt-20 lg:grid lg:grid-cols-6 lg:gap-8">

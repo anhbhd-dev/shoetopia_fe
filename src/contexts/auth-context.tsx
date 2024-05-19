@@ -72,7 +72,15 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
     });
     toast.success("Đăng xuất thành công!", {
       duration: 2000,
-      position: "top-right",
+      position: "top-center",
+      style: {
+        background: "#fff",
+        color: "#333",
+      },
+      iconTheme: {
+        primary: "#61d345",
+        secondary: "#fff",
+      },
     });
     router.push("/");
   };
