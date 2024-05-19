@@ -48,7 +48,7 @@ export type CheckoutInfo = {
 };
 export const CartContext = createContext<{
   cart: CartState;
-  addToCart: (item: { variationId: string; quantity: number }) => void;
+  addToCart: (item: { variationId: string; quantity: number }) => any;
   decreaseCartItem?: (item: { variationId: string; quantity?: number }) => void;
   removeFromCart: (item: RemoveFromCartPayloadType) => void;
   clearCart?: () => void;
@@ -91,7 +91,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       const cartDataResponse = await addToUserCart(item);
       dispatch({ type: CartActionType.FETCH_CART, payload: cartDataResponse });
     } catch (err) {
-      console.log(err);
+      return err;
     }
   };
   const fetchCart = async () => {
@@ -124,14 +124,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // const clearCart = () => {
   //   dispatch({ type: "CLEAR_CART" });
-  // };
-
-  // const updateCart = (updatedCart: CartState) => {
-  //   dispatch({ type: "UPDATE_CART", payload: updatedCart });
-  //   dispatch({
-  //     type: "CALCULATE_TOTALS",
-  //     payload: { shippingFeePercentage: 0.1 },
-  //   });
   // };
 
   const value = {

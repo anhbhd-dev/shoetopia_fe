@@ -19,7 +19,7 @@ export default function ProductDetailsInfo({
   const [currentVariation, setCurrentVariation] = React.useState<
     Variation | undefined
   >(undefined);
-
+  const [errText, setErrText] = useState<string>("");
   const [quantityInput, setQuantityInput] = React.useState(1);
   const { user } = useAuthContext();
   const { addToCart, cart } = useCartContext();
@@ -47,6 +47,7 @@ export default function ProductDetailsInfo({
   const handleChangeQuantityInput = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
+    setErrText("");
     const value = e.target.value;
 
     // Sử dụng regex để kiểm tra nếu là số và lớn hơn 0
@@ -57,6 +58,7 @@ export default function ProductDetailsInfo({
   };
 
   const handlePlusMinusQuantity = (value: number) => {
+    setErrText("");
     setQuantityInput((prev) => prev + value);
   };
 
@@ -80,9 +82,28 @@ export default function ProductDetailsInfo({
       return;
     }
     if (currentVariation) {
-      addToCart({
+      const resAddToCart = await addToCart({
         variationId: currentVariation._id,
         quantity: quantityInput ?? 1,
+      });
+
+      if (resAddToCart && (resAddToCart as any)?.response?.status !== 201) {
+        setErrText(
+          (resAddToCart as any)?.response?.data?.message ?? "Có lỗi xảy ra"
+        );
+        return;
+      }
+      toast.success("Thêm vào giỏ hàng thành công.", {
+        position: "top-center",
+        duration: 2000,
+        style: {
+          background: "#fff",
+          color: "#333",
+        },
+        iconTheme: {
+          primary: "#61d345",
+          secondary: "#fff",
+        },
       });
     }
   };
@@ -165,6 +186,7 @@ export default function ProductDetailsInfo({
           </div>
         </div>
       </div>
+      {errText && <p className="mt-4 text-red-700">{errText}</p>}
       <div className="flex gap-5">
         <Button
           onClick={handleAddToCart}

@@ -10,7 +10,7 @@ import { ProductDetailRate } from "../order-details/product-rating/product-rate"
 import { fetchReviewsByProductId } from "@/services/review.service";
 import { Review } from "@/types/review.type";
 
-function Icon({ id, open }) {
+function Icon({ id, open }: { id: number; open: number }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +38,7 @@ export function DescriptionAndReview({
 }: DescriptionAndReviewProps) {
   const [open, setOpen] = React.useState(0);
 
-  const handleOpen = (value) => setOpen(open === value ? 0 : value);
+  const handleOpen = (value: any) => setOpen(open === value ? 0 : value);
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
@@ -57,16 +57,22 @@ export function DescriptionAndReview({
         <AccordionHeader onClick={() => handleOpen(1)}>
           Mô tả sản phẩm
         </AccordionHeader>
-        <AccordionBody>{productDetails?.description}</AccordionBody>
+        <AccordionBody className="text-base">
+          {productDetails?.description}
+        </AccordionBody>
       </Accordion>
       <Accordion open={open === 2} icon={<Icon id={2} open={open} />}>
         <AccordionHeader onClick={() => handleOpen(2)}>
           Đánh giá của người mua
         </AccordionHeader>
         <AccordionBody>
-          {reviews.map((review) => (
-            <ProductDetailRate key={review._id} review={review} />
-          ))}
+          {reviews?.length === 0 ? (
+            <p className="text-base">Chưa có đánh giá nào</p>
+          ) : (
+            reviews.map((review) => (
+              <ProductDetailRate key={review._id} review={review} />
+            ))
+          )}
         </AccordionBody>
       </Accordion>
     </div>
