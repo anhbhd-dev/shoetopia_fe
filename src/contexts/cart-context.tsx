@@ -5,6 +5,7 @@ import {
   addToUserCart,
   fetchUserCart,
   removeItemFromUserCart,
+  updateToUserCart,
 } from "@/services/cart.service";
 import { CartAction, CartActionType, CartState } from "@/types/cart";
 import {
@@ -49,6 +50,10 @@ export type CheckoutInfo = {
 export const CartContext = createContext<{
   cart: CartState;
   addToCart: (item: { variationId: string; quantity: number }) => any;
+  updateCartItemQuantity: (item: {
+    variationId: string;
+    quantity: number;
+  }) => any;
   decreaseCartItem?: (item: { variationId: string; quantity?: number }) => void;
   removeFromCart: (item: RemoveFromCartPayloadType) => void;
   clearCart?: () => void;
@@ -59,6 +64,7 @@ export const CartContext = createContext<{
 }>({
   cart: initialState,
   addToCart: () => {},
+  updateCartItemQuantity: () => {},
   decreaseCartItem: () => {},
   removeFromCart: () => {},
   clearCart: () => {},
@@ -89,6 +95,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const addToCart = async (item: AddToCartPayloadType) => {
     try {
       const cartDataResponse = await addToUserCart(item);
+      dispatch({ type: CartActionType.FETCH_CART, payload: cartDataResponse });
+    } catch (err) {
+      return err;
+    }
+  };
+  const updateCartItemQuantity = async (item: AddToCartPayloadType) => {
+    try {
+      const cartDataResponse = await updateToUserCart(item);
       dispatch({ type: CartActionType.FETCH_CART, payload: cartDataResponse });
     } catch (err) {
       return err;
@@ -129,6 +143,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const value = {
     cart,
     addToCart,
+    updateCartItemQuantity,
     fetchCart,
     removeFromCart,
     // clearCart,

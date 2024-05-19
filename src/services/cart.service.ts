@@ -24,6 +24,15 @@ export const addToUserCart = async (
   );
   return response.data;
 };
+export const updateToUserCart = async (
+  data: AddToCartPayloadType
+): Promise<CartState> => {
+  const response = await axiosInstance.post(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/cart/update-item`,
+    data
+  );
+  return response.data;
+};
 export type RemoveFromCartPayloadType = Partial<AddToCartPayloadType>;
 export const removeItemFromUserCart = async (
   data: Partial<RemoveFromCartPayloadType>

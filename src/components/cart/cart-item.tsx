@@ -11,7 +11,8 @@ export type CartItemProps = {
   item?: CartItem;
 };
 export default function CartItemRow({ item }: CartItemProps) {
-  const { removeFromCart } = useCartContext();
+  const { removeFromCart, updateCartItemQuantity } = useCartContext();
+  const [errText, setErrText] = React.useState("");
   const [quantityInput, setQuantityInput] = React.useState(item?.quantity ?? 1);
   const handleRemoveItemFormCart = async () => {
     removeFromCart({ variationId: item?.variation?._id });
@@ -29,8 +30,33 @@ export default function CartItemRow({ item }: CartItemProps) {
   };
 
   const handlePlusMinusQuantity = (value: number) => {
-    setQuantityInput((prev) => prev + value);
+    const newQuantity = quantityInput + value;
+    setQuantityInput(newQuantity);
   };
+
+  React.useEffect(() => {
+    const updateQuantity = async () => {
+      const updatedQuantityRes = await updateCartItemQuantity({
+        variationId: item?.variation?._id ?? "",
+        quantity: quantityInput,
+      });
+      if (
+        updatedQuantityRes &&
+        (updatedQuantityRes as any)?.response?.status !== 201
+      ) {
+        setErrText(
+          (updatedQuantityRes as any)?.response?.data?.message ??
+            "Có lỗi xảy ra"
+        );
+        return;
+      } else {
+        setErrText("");
+      }
+    };
+
+    updateQuantity();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quantityInput, item?.variation?._id]);
 
   const handleChangeQuantityInput = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -68,7 +94,7 @@ export default function CartItemRow({ item }: CartItemProps) {
           </p>
         </div>
         <div className="mt-4 w-[160px] flex justify-between">
-          <div className="flex items-center border-gray-100">
+          <div className="flex items-center border-gray-100 relative">
             <button
               className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-black hover:text-blue-50"
               onClick={() => handlePlusMinusQuantity(-1)}
@@ -88,6 +114,11 @@ export default function CartItemRow({ item }: CartItemProps) {
             >
               +
             </button>
+            {errText && (
+              <p className="absolute bottom-0 -left-56 whitespace-nowrap text-red-700 text-sm">
+                {errText}
+              </p>
+            )}
           </div>
           <div className="flex items-center space-x-4">
             <svg
