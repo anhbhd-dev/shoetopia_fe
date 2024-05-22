@@ -17,7 +17,7 @@ export type FilterAndSortProductsType = {
   categories?: string;
   minPrice?: number;
   maxPrice?: number;
-  size?: string;
+  sizes?: string;
   sortBy?: SortBy;
   orderBy?: OrderBy;
   page?: number;
@@ -78,7 +78,10 @@ export default function ProductsListing() {
     let timer: any;
 
     const fetchAllProducts = async () => {
-      const data = await fetchProducts(filterProductsPage);
+      const fetchProductsParams = { ...filterProductsPage };
+      delete fetchProductsParams.totalDocs;
+      delete fetchProductsParams.totalPage;
+      const data = await fetchProducts(fetchProductsParams);
       setProducts(data.products);
       setFilterProductsPage({
         ...filterProductsPage,
@@ -102,7 +105,7 @@ export default function ProductsListing() {
     filterProductsPage.categories,
     filterProductsPage.minPrice,
     filterProductsPage.maxPrice,
-    filterProductsPage.size,
+    filterProductsPage.sizes,
     filterProductsPage.sortBy,
     filterProductsPage.orderBy,
   ]);

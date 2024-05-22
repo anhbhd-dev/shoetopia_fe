@@ -29,9 +29,11 @@ export default function FilterPLP({
 }: FilterPLPType) {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+  const [selectedSizeNames, setSelectedSizeNames] = useState<string[]>([]);
   // const [selectedVariationNames, setSelectedVariationNames] = useState<string[]>([]);
 
   const debouncedSelectedCategoryIds = useDebounce(selectedCategoryIds, 500); // Trì hoãn 500ms
+  const debouncedSelectedSizeNames = useDebounce(selectedSizeNames, 500); // Trì hoãn 500ms
   const debouncedSearchKeyword = useDebounce(searchKeyword, 500); // Trì hoãn 500ms
   const [priceRange, setPriceRange] = useState<{
     minPrice?: number;
@@ -82,6 +84,16 @@ export default function FilterPLP({
     }
     setIsLoadingProducts(true);
   };
+  const handleChangeSizes = (sizeName: string, checked: boolean) => {
+    if (checked) {
+      setSelectedSizeNames([...selectedSizeNames, sizeName]);
+    } else {
+      setSelectedSizeNames(
+        selectedSizeNames.filter((size) => size !== sizeName)
+      );
+    }
+    setIsLoadingProducts(true);
+  };
   useEffect(() => {
     setFilterProductsPage((prev) => ({
       ...prev,
@@ -89,7 +101,15 @@ export default function FilterPLP({
       page: 1,
     }));
   }, [debouncedSelectedCategoryIds, setFilterProductsPage]);
+  useEffect(() => {
+    setFilterProductsPage((prev) => ({
+      ...prev,
+      sizes: debouncedSelectedSizeNames.join(","),
+      page: 1,
+    }));
+  }, [debouncedSelectedSizeNames, setFilterProductsPage]);
 
+  console.log(selectedSizeNames);
   return (
     <div className="overflow-hidden">
       <div className="lg:mb-10 ml-2">
@@ -135,7 +155,11 @@ export default function FilterPLP({
       <div>
         <p className="ml-2 text-xl font-bold lg:mb-5 mb-2">Sizes</p>
         {variationNames?.map((name) => (
-          <Checkbox key={name} label={<p>Size {name}</p>} />
+          <Checkbox
+            key={name}
+            onChange={(e) => handleChangeSizes(name, e.currentTarget.checked)}
+            label={<p>Size {name}</p>}
+          />
         ))}
       </div>
     </div>
