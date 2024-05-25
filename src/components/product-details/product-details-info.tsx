@@ -8,6 +8,7 @@ import { formatMoney } from "@/utils/format-money";
 import { Button, IconButton, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export type ProductDetailsInfoProps = {
   productDetails: Product | undefined;
@@ -24,7 +25,7 @@ export default function ProductDetailsInfo({
   const { user } = useAuthContext();
   const { addToCart, cart } = useCartContext();
   const { openLoginForm } = useAppContext();
-
+  const router = useRouter();
   const findMinMaxPrice = (variations: Variation[]) => {
     const minPrice = variations.reduce(
       (min, variation) =>
@@ -105,6 +106,40 @@ export default function ProductDetailsInfo({
           secondary: "#fff",
         },
       });
+    }
+  };
+  const handleBuyNow = async () => {
+    if (!user?.isAuthenticated) {
+      toast.error("Bạn cần đăng nhập trước", {
+        position: "top-center",
+        duration: 2000,
+        style: {
+          background: "#333",
+          color: "#fff",
+        },
+        iconTheme: {
+          primary: "#fff",
+          secondary: "#333",
+        },
+      });
+      return openLoginForm();
+    }
+    if (!currentVariation) {
+      return;
+    }
+    if (currentVariation) {
+      const resAddToCart = await addToCart({
+        variationId: currentVariation._id,
+        quantity: quantityInput ?? 1,
+      });
+
+      if (resAddToCart && (resAddToCart as any)?.response?.status !== 201) {
+        setErrText(
+          (resAddToCart as any)?.response?.data?.message ?? "Có lỗi xảy ra"
+        );
+        return;
+      }
+      router.push("/cart");
     }
   };
 
@@ -204,6 +239,7 @@ export default function ProductDetailsInfo({
           variant="outlined"
           className="lg:mt-8 lg:min-w-40"
           disabled={!currentVariation}
+          onClick={handleBuyNow}
         >
           Mua ngay
         </Button>
