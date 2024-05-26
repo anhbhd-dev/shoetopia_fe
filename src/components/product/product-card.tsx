@@ -87,7 +87,7 @@ export function ProductCard({ product }: ProductCardType) {
                     clipRule="evenodd"
                   />
                 </svg>
-                {avgRating}
+                {avgRating.toFixed(1)}
               </>
             )}
           </Typography>

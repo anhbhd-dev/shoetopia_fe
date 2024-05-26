@@ -4,7 +4,6 @@ import { ORDERS_LIST_BASE_URL } from "@/routes/routes";
 import { updateOrderByCode } from "@/services/order.service";
 import { Order } from "@/types/order.type";
 import { formatMoney } from "@/utils/format-money";
-import { Button } from "@material-tailwind/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -28,7 +27,7 @@ const SuccessPage = () => {
   const [orderUpdateResult, setOrderUpdateResult] = useState<Order | undefined>(
     undefined
   );
-
+  console.log(vnp_OrderInfo, vnp_TransactionStatus);
   useEffect(() => {
     const updateOrderByOrderCode = async () => {
       if (vnp_OrderInfo) {
@@ -45,6 +44,7 @@ const SuccessPage = () => {
             orderStatus: OrderStatus.CANCELLED,
           });
         }
+        console.log(updatedOrder);
         setOrderUpdateResult(updatedOrder);
       }
     };

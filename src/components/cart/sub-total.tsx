@@ -9,6 +9,7 @@ import {
 import { Order } from "@/types/order.type";
 import { formatMoney } from "@/utils/format-money";
 import Button from "@material-tailwind/react/components/Button";
+import { AxiosError } from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
@@ -61,15 +62,18 @@ export default function SubTotal() {
               secondary: "#fff",
             },
           });
-          router.push("/");
+          router.push(`/profile/orders/${orderResponse._id}`);
         }
       } catch (err) {
-        toast.error("Đã có lỗi xảy ra.", {
-          duration: 2000,
-          style: {
-            background: "#fff",
-          },
-        });
+        toast.error(
+          (err as any)?.response.data.message ?? "Đã có lỗi xảy ra.",
+          {
+            duration: 2000,
+            style: {
+              background: "#fff",
+            },
+          }
+        );
       }
     }
   };

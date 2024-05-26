@@ -84,7 +84,7 @@ export default function OrderItemInfo({
           {item?.product?.name}
         </Link>
       </th>
-      <td className="py-4 w-32">
+      <td className="py-4 w-32 text-center">
         <Image
           className="rounded-lg"
           src={item?.product?.avatar}
@@ -92,9 +92,9 @@ export default function OrderItemInfo({
           alt="Dan Abram"
         />
       </td>
-      <td className="py-4 w-32">{item?.variation?.size}</td>
-      <td className="py-4 w-32">{item?.quantity}</td>
-      <td className="py-4 w-32">{formatMoney(item.price ?? 0)}</td>
+      <td className="py-4 w-32 text-center">{item?.variation?.size}</td>
+      <td className="py-4 w-32 text-center">{item?.quantity}</td>
+      <td className="py-4 w-32 text-center">{formatMoney(item.price ?? 0)}</td>
       {orderStatus && orderStatus === OrderStatus.DELIVERED && !isExisted && (
         <td>
           <RateItemModal
