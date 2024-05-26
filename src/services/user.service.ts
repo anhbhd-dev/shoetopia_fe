@@ -36,6 +36,16 @@ export const updateUserPassword = async (data: updatePasswordType) => {
 
   return response.data;
 };
+export const resetPassword = async (email: string) => {
+  const response = await axiosInstance.get(
+    `http://${process.env.NEXT_PUBLIC_BASE_API_ENDPOINT}/api/v1/users/reset-password`,
+    {
+      params: { email },
+    }
+  );
+
+  return response.data;
+};
 
 export type DeleteVariationPayloadType = {
   id: string;

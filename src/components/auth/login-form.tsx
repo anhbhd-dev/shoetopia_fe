@@ -14,7 +14,7 @@ import {
 import React from "react";
 import { useAppContext } from "@/contexts/app-context";
 import { UserLoginFormType, login } from "@/services/auth.service";
-import { fetchUserProfile } from "@/services/user.service";
+import { fetchUserProfile, resetPassword } from "@/services/user.service";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
 import { UserData, useAuthContext } from "@/contexts/auth-context";
@@ -27,6 +27,7 @@ export function LoginForm() {
   const togglePasswordVisibility = () => setPasswordShown((cur) => !cur);
   const { isOpenLoginForm, closeLoginForm, openSignUpForm } = useAppContext();
   const { setUser, user } = useAuthContext();
+
   const handleSubmitForm = async (values: UserLoginFormType) => {
     try {
       const loginRes: LoginSuccessResponse = await login(values);
@@ -104,7 +105,30 @@ export function LoginForm() {
       handleSubmitForm(values);
     },
   });
-
+  const handleForgotPassword = async () => {
+    try {
+      const res = await resetPassword(formik.values.email);
+      return toast.success("Mật khẩu mới đã được gửi về email của bạn.", {
+        duration: 2000,
+        style: {
+          background: "#fff",
+        },
+        iconTheme: {
+          primary: "#61d345",
+          secondary: "#fff",
+        },
+      });
+    } catch (err) {
+      if ((err as AxiosError).response?.status === 404) {
+        return toast.error("Không tồn tại người dùng với email này.", {
+          duration: 2000,
+          style: {
+            background: "#fff",
+          },
+        });
+      }
+    }
+  };
   return (
     <Dialog open={isOpenLoginForm} size="xs" handler={closeLoginForm}>
       <DialogBody>
@@ -229,6 +253,14 @@ export function LoginForm() {
                 >
                   Đăng ký
                 </span>
+              </Typography>
+              <Typography
+                variant="small"
+                color="gray"
+                className="mt-4 text-center font-normal cursor-pointer"
+                onClick={handleForgotPassword}
+              >
+                Quên mật khẩu?
               </Typography>
             </form>
           </div>
