@@ -17,14 +17,14 @@ export default function Footer() {
           <div className="grid justify-between grid-cols-3 gap-4">
             <ul>
               <p className="block mb-3 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900 opacity-40">
-                Product
+                Sản phẩm
               </p>
               <li>
                 <a
                   href="#"
                   className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
                 >
-                  Overview
+                  Tổng quan
                 </a>
               </li>
               <li>
@@ -32,73 +32,51 @@ export default function Footer() {
                   href="#"
                   className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
                 >
-                  Features
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
-                >
-                  Solutions
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
-                >
-                  Tutorials
+                  Hoạt động
                 </a>
               </li>
             </ul>
             <ul>
               <p className="block mb-3 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900 opacity-40">
-                Company
+                Công ty
               </p>
               <li>
                 <a
                   href="#"
                   className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
                 >
-                  About us
+                  Về chúng tôi
                 </a>
               </li>
+
               <li>
                 <a
                   href="#"
                   className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
                 >
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
-                >
-                  Press
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
-                >
-                  News
+                  Tin tức
                 </a>
               </li>
             </ul>
             <ul>
               <p className="block mb-3 font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900 opacity-40">
-                Resource
+                Tài nguyên
               </p>
               <li>
                 <a
                   href="#"
                   className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
                 >
-                  Blog
+                  Thông báo
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#"
+                  className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
+                >
+                  Sự kiện
                 </a>
               </li>
               <li>
@@ -106,28 +84,13 @@ export default function Footer() {
                   href="#"
                   className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
                 >
-                  Newsletter
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
-                >
-                  Events
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block py-1.5 font-sans text-base font-normal leading-relaxed text-gray-700 antialiased transition-colors hover:text-blue-gray-900"
-                >
-                  Help center
+                  Trung tâm hỗ trợ
                 </a>
               </li>
             </ul>
           </div>
         </div>
+
         <div className="flex flex-col items-center justify-center w-full py-4 mt-12 border-t border-blue-gray-50 md:flex-row md:justify-between">
           <div className="flex gap-4 text-blue-gray-900 sm:justify-center">
             <a
@@ -212,6 +175,7 @@ export default function Footer() {
               </svg>
             </a>
           </div>
+          <p>shoetopia@gmail.com</p>
         </div>
       </div>
     </footer>

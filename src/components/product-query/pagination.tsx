@@ -48,7 +48,7 @@ export function PLPPagination({
         onClick={prev}
         disabled={filterProductsPage?.page === 1}
       >
-        <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
+        <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Trang trước
       </Button>
       <div className="flex items-center gap-2">
         {Array.from({ length: filterProductsPage?.totalPage ?? 0 }).map(
@@ -65,7 +65,7 @@ export function PLPPagination({
         onClick={next}
         disabled={filterProductsPage?.page === filterProductsPage?.totalPage}
       >
-        Next
+        Trang sau
         <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
       </Button>
     </div>

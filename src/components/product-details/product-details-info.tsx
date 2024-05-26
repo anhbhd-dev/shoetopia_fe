@@ -6,11 +6,12 @@ import { Product } from "@/types/product.type";
 import { Variation } from "@/types/variation.type";
 import { formatMoney } from "@/utils/format-money";
 import { Button, IconButton, Typography } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
-export type ProductDetailsInfoProps = {
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { Dialog, DialogBody } from "@material-tailwind/react";
+import Image from "next/image";
+type ProductDetailsInfoProps = {
   productDetails: Product | undefined;
 };
 const REVIEWS_PER_PAGE = 5;
@@ -249,11 +250,7 @@ export default function ProductDetailsInfo({
   );
 }
 
-import { Dialog, DialogBody } from "@material-tailwind/react";
-import Image from "next/image";
-import { fetchReviewsByProductId } from "@/services/review.service";
-
-export function OpenSizeChart() {
+function OpenSizeChart() {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => setOpen(!open);
